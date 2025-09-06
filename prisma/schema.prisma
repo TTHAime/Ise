@@ -1,0 +1,80 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/* ========= Enums ========= */
+
+enum TransactionType {
+  INCOME    // รายรับ
+  EXPENSE   // รายจ่าย
+}
+
+/* ========= Models ========= */
+
+model User {
+  id              String      @id @default(cuid())
+  email           String      @unique
+  passwordHash    String
+  displayName     String?
+  profileImage    String?
+  
+  totalBalance    Decimal     @default(0) @db.Decimal(18, 2)
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // relations
+  categories      Category[]
+  transactions    Transaction[]
+
+  @@index([email])
+}
+
+/* หมวดหมู่รายรับ-รายจ่าย ที่ user สร้างเอง */
+model Category {
+  id            String          @id @default(cuid())
+  userId        String
+  name          String          // เช่น "ค่าอาหาร", "เงินเดือน", "ค่าเดินทาง"
+  type          TransactionType // INCOME หรือ EXPENSE
+  icon          String?         // emoji หรือ icon name สำหรับ UI
+  color         String?         // hex color code สำหรับ UI เช่น "#FF5733"
+  description   String?         // รายละเอียดเพิ่มเติม
+  isActive      Boolean         @default(true) // สำหรับซ่อน/แสดง category
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions  Transaction[]
+
+  @@unique([userId, name, type]) // ป้องกันชื่อหมวดซ้ำในแต่ละ user + type
+  @@index([userId, type, isActive])
+}
+
+/* บันทึกรายการรับ-จ่าย */
+model Transaction {
+  id            String          @id @default(cuid())
+  userId        String
+  categoryId    String?         // optional - user สามารถไม่เลือกหมวดได้
+  type          TransactionType // INCOME หรือ EXPENSE
+  amount        Decimal         @db.Decimal(18, 2) // จำนวนเงิน (บวกเสมอ)
+  description   String?         // คำอธิบายสั้นๆ เช่น "ซื้อข้าวกล่อง", "เงินเดือนเดือนก.ย."
+  note          String?         // หมายเหตุเพิ่มเติม
+  occurredAt    DateTime        // วันที่เกิดธุรกรรม (user สามารถเลือกได้)
+  
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category      Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([userId, occurredAt])
+  @@index([userId, type])
+  @@index([categoryId, occurredAt])
+}
