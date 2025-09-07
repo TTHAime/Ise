@@ -1,10 +1,17 @@
 import { VerificationCodeType } from '@prisma/client';
 import { prisma } from '../libs/prisma';
 import { compareValue, hashValue } from '../utils/bcrypt';
-import { addYears } from 'date-fns';
+import { addDays, addYears } from 'date-fns';
 import appAssert from '../utils/appAssert';
 import { CONFLICT, UNAUTHORIZED } from '../libs/http';
-import { refreshTokenSignOptions, signToken } from '../utils/jwt';
+import {
+  RefreshTokenPayload,
+  refreshTokenSignOptions,
+  signToken,
+  verifyToken,
+} from '../utils/jwt';
+
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 export type CreateAccountParams = {
   email: string;
@@ -31,6 +38,7 @@ export const createAccount = async (data: CreateAccountParams) => {
       id: true,
       email: true,
       displayName: true,
+      verified: true,
       createdAt: true,
       updatedAt: true,
     },
@@ -109,5 +117,53 @@ export const loginUser = async ({
     },
     accessToken,
     refreshToken,
+  };
+};
+
+export const refreshUserAccessToken = async (refreshToken: string) => {
+  const { payload } = verifyToken<RefreshTokenPayload>(refreshToken, {
+    secret: refreshTokenSignOptions.secret,
+  });
+  appAssert(payload, UNAUTHORIZED, 'Invalid refresh token');
+
+  const { sessionId } = payload;
+  const session = await prisma.session.findUnique({
+    where: { id: sessionId },
+  });
+  const now = Date.now();
+  appAssert(
+    session && session.expiresAt.getTime() > now,
+    UNAUTHORIZED,
+    'Session expired'
+  );
+  // refresh the session if it expires in the next 24 hours
+  const sessionNeedRefresh = session.expiresAt.getTime() - now <= ONE_DAY_MS;
+  if (sessionNeedRefresh) {
+    await prisma.session.updateMany({
+      where: {
+        id: session.id,
+        expiresAt: { lte: new Date(now + ONE_DAY_MS) },
+      },
+      data: { expiresAt: addDays(now, 30) },
+    });
+  }
+
+  const newRefreshToken = sessionNeedRefresh
+    ? signToken(
+        {
+          sessionId: session.id,
+        },
+        refreshTokenSignOptions
+      )
+    : undefined;
+
+  const accessToken = signToken({
+    userId: session.userId,
+    sessionId: session.id,
+  });
+
+  return {
+    accessToken,
+    newRefreshToken,
   };
 };

@@ -11,11 +11,11 @@ const defaultCookieOptions: CookieOptions = {
   secure,
 };
 
-const getAccessTokenCookieOptions = (): CookieOptions => ({
+export const getAccessTokenCookieOptions = (): CookieOptions => ({
   ...defaultCookieOptions,
   expires: addMinutes(new Date(), 15),
 });
-const getRefreshTokenCookieOptions = (): CookieOptions => ({
+export const getRefreshTokenCookieOptions = (): CookieOptions => ({
   ...defaultCookieOptions,
   expires: addDays(new Date(), 30),
   path: REFRESH_PATH,
