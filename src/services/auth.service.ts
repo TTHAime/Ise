@@ -1,11 +1,10 @@
 import { VerificationCodeType } from '@prisma/client';
 import { prisma } from '../libs/prisma';
-import { hashValue } from '../utils/bcrypt';
+import { compareValue, hashValue } from '../utils/bcrypt';
 import { addYears } from 'date-fns';
-import jwt from 'jsonwebtoken';
-import { config } from '../libs/config';
 import appAssert from '../utils/appAssert';
-import { CONFLICT } from '../libs/http';
+import { CONFLICT, UNAUTHORIZED } from '../libs/http';
+import { refreshTokenSignOptions, signToken } from '../utils/jwt';
 
 export type CreateAccountParams = {
   email: string;
@@ -25,7 +24,7 @@ export const createAccount = async (data: CreateAccountParams) => {
   const user = await prisma.user.create({
     data: {
       email: data.email,
-      displayName: data.name, // ต้องมี field นี้ใน schema.prisma ด้วย
+      displayName: data.name,
       passwordHash,
     },
     select: {
@@ -53,26 +52,62 @@ export const createAccount = async (data: CreateAccountParams) => {
     },
   });
 
-  const refreshToken = jwt.sign(
+  const refreshToken = signToken(
     { sessionId: session.id },
-    config.JWT_REFRESH_SECRET,
-    {
-      audience: ['user'],
-      expiresIn: '30d',
-    }
+    refreshTokenSignOptions
   );
 
-  const accessToken = jwt.sign(
-    { userId: user.id, sessionId: session.id },
-    config.JWT_ACCESS_SECRET,
-    {
-      audience: ['user'],
-      expiresIn: '15m',
-    }
-  );
+  const accessToken = signToken({ userId: user.id, sessionId: session.id });
 
   return {
     user: user,
+    accessToken,
+    refreshToken,
+  };
+};
+
+export type LoginParams = {
+  email: string;
+  password: string;
+  name?: string;
+  userAgent?: string;
+};
+
+export const loginUser = async ({
+  email,
+  password,
+  userAgent,
+}: LoginParams) => {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  appAssert(user, UNAUTHORIZED, 'Invalid email or password');
+
+  const isPasswordValid = await compareValue(password, user.passwordHash);
+  appAssert(isPasswordValid, UNAUTHORIZED, 'Invalid email or password');
+
+  const session = await prisma.session.create({
+    data: {
+      userId: user.id,
+      userAgent,
+    },
+  });
+  const sessionInfo = {
+    sessionId: session.id,
+  };
+  const refreshToken = signToken(sessionInfo, refreshTokenSignOptions);
+  const accessToken = signToken({ userId: user.id, ...sessionInfo });
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      displayName: user.displayName,
+      verified: user.verified,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    },
     accessToken,
     refreshToken,
   };
