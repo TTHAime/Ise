@@ -4,8 +4,9 @@ import { prisma } from './libs/prisma';
 import express from 'express';
 import cors from 'cors';
 import errorHandler from './middlewares/errorHandler';
-import { OK } from './libs/http'
+import { OK } from './libs/http';
 import catchErrors from './utils/catchErrors';
+import authRoutes from './routes/auth.route';
 
 const PORT = config.PORT || 4000;
 const app = express();
@@ -20,12 +21,14 @@ app.use(
   })
 );
 
-app.get("/" , (req , res) => {
+app.get('/', (req, res) => {
   return res.status(OK).json({
-    status:"healthy"
+    status: 'healthy',
   });
-})
+});
 app.use(errorHandler);
+
+app.use('/auth', authRoutes);
 
 async function start() {
   try {

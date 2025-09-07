@@ -33,7 +33,35 @@ model User {
   categories      Category[]
   transactions    Transaction[]
 
+  verificationCodes  VerificationCode[]
+  sessions  Session[]
+  verified Boolean @default(false)
   @@index([email])
+}
+enum VerificationCodeType {
+  email_verification
+  password_reset
+}
+
+model VerificationCode {
+  id        String                @id @default(cuid())
+  type      VerificationCodeType
+  userId    String
+  user      User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime              @default(now())
+  expiresAt DateTime
+
+  @@index([userId])
+}
+
+model Session {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime @default(dbgenerated("(NOW() + interval '30 days')")) // ค่า default 30 วัน
 }
 
 /* หมวดหมู่รายรับ-รายจ่าย ที่ user สร้างเอง */
