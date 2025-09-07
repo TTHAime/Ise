@@ -1,5 +1,5 @@
 import { Session, User } from '@prisma/client';
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
 import { config } from '../libs/config';
 
 export type RefreshTokenPayload = {
@@ -15,7 +15,11 @@ type SignOptionsAndSecret = SignOptions & {
   secret: string;
 };
 
-const defaults: SignOptions = {
+const signdefaults: SignOptions = {
+  audience: ['user'],
+};
+
+const verifyDefaults: VerifyOptions = {
   audience: ['user'],
 };
 
@@ -34,5 +38,26 @@ export const signToken = (
   options?: SignOptionsAndSecret
 ) => {
   const { secret, ...signOpts } = options || accessTokenSignOptions;
-  return jwt.sign(payload, secret, { ...defaults, ...signOpts });
+  return jwt.sign(payload, secret, { ...signdefaults, ...signOpts });
+};
+
+export const verifyToken = <TPayload extends object = AccessTokenPayload>(
+  token: string,
+  options?: VerifyOptions & { secret: string }
+) => {
+  const { secret = config.JWT_ACCESS_SECRET, ...verifyOpts } = options || {};
+  try {
+    const payload = jwt.verify(token, secret, {
+      ...verifyDefaults,
+      ...verifyOpts,
+    }) as TPayload;
+    return {
+      payload,
+    };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    }
+    return { error: String(error) };
+  }
 };

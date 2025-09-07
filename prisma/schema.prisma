@@ -35,7 +35,7 @@ model User {
 
   verificationCodes  VerificationCode[]
   sessions  Session[]
-  verified Boolean @default(false)
+  
   @@index([email])
 }
 enum VerificationCodeType {

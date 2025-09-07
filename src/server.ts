@@ -26,9 +26,9 @@ app.get('/', (req, res) => {
     status: 'healthy',
   });
 });
-app.use(errorHandler);
 
 app.use('/auth', authRoutes);
+app.use(errorHandler);
 
 async function start() {
   try {

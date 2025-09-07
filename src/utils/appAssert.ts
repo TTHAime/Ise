@@ -1,5 +1,5 @@
 import assert from 'assert';
-import AppError from './appError';
+import AppError from './AppError';
 import { HttpStatusCode } from '../libs/http';
 import AppErrorCode from '../libs/appErrorCode';
 

@@ -33,7 +33,6 @@ export const createAccount = async (data: CreateAccountParams) => {
       displayName: true,
       createdAt: true,
       updatedAt: true,
-      verified: true,
     },
   });
 

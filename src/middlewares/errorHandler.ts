@@ -1,7 +1,7 @@
 import { ErrorRequestHandler, Response } from 'express';
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from '../libs/http';
 import { z } from 'zod';
-import AppError from '../utils/appError';
+import AppError from '../utils/AppError';
 
 const handleZodError = (res: Response, error: z.ZodError) => {
   const errors = error.issues.map(err => ({
