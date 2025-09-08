@@ -29,3 +29,7 @@ export const registerSchema = loginSchema
     message: 'Password do not match',
     path: ['confirmPassword'],
   });
+
+export const verificationCodeSchema = z.object({
+  code: z.string().min(1, 'Verification code is required'),
+});

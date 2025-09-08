@@ -3,13 +3,21 @@ import { prisma } from '../libs/prisma';
 import { compareValue, hashValue } from '../utils/bcrypt';
 import { addDays, addYears } from 'date-fns';
 import appAssert from '../utils/appAssert';
-import { CONFLICT, UNAUTHORIZED } from '../libs/http';
+import {
+  CONFLICT,
+  INTERNAL_SERVER_ERROR,
+  NOT_FOUND,
+  UNAUTHORIZED,
+} from '../libs/http';
 import {
   RefreshTokenPayload,
   refreshTokenSignOptions,
   signToken,
   verifyToken,
 } from '../utils/jwt';
+import { sendMail } from '../utils/sendmail';
+import { getVerifyEmailTemplate } from '../utils/emailTemplate';
+import { config } from '../libs/config';
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -47,10 +55,21 @@ export const createAccount = async (data: CreateAccountParams) => {
   const verificationCode = await prisma.verificationCode.create({
     data: {
       userId: user.id,
-      type: VerificationCodeType.email_verification,
+      type: VerificationCodeType.EmailVerification,
       expiresAt: addYears(new Date(), 1),
     },
   });
+
+  const url = `${config.APP_ORIGIN}/email/verify/${verificationCode.id}`;
+  try {
+    await sendMail({
+      to: user.email,
+      ...getVerifyEmailTemplate(url),
+    });
+    console.log('Verification email sent successfully');
+  } catch (error) {
+    console.error('Failed to send verification email:', error);
+  }
 
   const session = await prisma.session.create({
     data: {
@@ -76,7 +95,6 @@ export const createAccount = async (data: CreateAccountParams) => {
 export type LoginParams = {
   email: string;
   password: string;
-  name?: string;
   userAgent?: string;
 };
 
@@ -165,5 +183,32 @@ export const refreshUserAccessToken = async (refreshToken: string) => {
   return {
     accessToken,
     newRefreshToken,
+  };
+};
+export const verifyEmail = async (code: string) => {
+  const validCode = await prisma.verificationCode.findFirst({
+    where: {
+      id: code,
+      type: VerificationCodeType.EmailVerification,
+      expiresAt: {
+        gt: new Date(), // ยังไม่หมดอายุ
+      },
+    },
+  });
+  appAssert(validCode, NOT_FOUND, 'Invalid or expired verification code');
+
+  const updatedUser = await prisma.user.update({
+    where: { id: validCode.userId },
+    data: { verified: true },
+    select: { id: true, email: true, verified: true },
+  });
+  appAssert(updatedUser, INTERNAL_SERVER_ERROR, 'Failed to verify email');
+
+  await prisma.verificationCode.delete({
+    where: { id: validCode.id },
+  });
+
+  return {
+    updatedUser,
   };
 };

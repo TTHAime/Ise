@@ -40,8 +40,8 @@ model User {
   @@index([email])
 }
 enum VerificationCodeType {
-  email_verification
-  password_reset
+  EmailVerification
+  PasswordReset
 }
 
 model VerificationCode {
