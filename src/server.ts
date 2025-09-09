@@ -7,6 +7,8 @@ import errorHandler from './middlewares/errorHandler';
 import { OK } from './libs/http';
 import catchErrors from './utils/catchErrors';
 import authRoutes from './routes/auth.route';
+import authenticate from './middlewares/authenticate';
+import userRoutes from './routes/user.route';
 
 const PORT = config.PORT || 4000;
 const app = express();
@@ -28,6 +30,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authRoutes);
+
+app.use('/user', authenticate, userRoutes);
+
 app.use(errorHandler);
 
 async function start() {
