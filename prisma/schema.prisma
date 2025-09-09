@@ -94,8 +94,8 @@ model Transaction {
   type          TransactionType // INCOME หรือ EXPENSE
   amount        Decimal         @db.Decimal(18, 2) // จำนวนเงิน (บวกเสมอ)
   description   String?         // คำอธิบายสั้นๆ เช่น "ซื้อข้าวกล่อง", "เงินเดือนเดือนก.ย."
-  note          String?         // หมายเหตุเพิ่มเติม
-  occurredAt    DateTime        // วันที่เกิดธุรกรรม (user สามารถเลือกได้)
+  
+  date    DateTime        // วันที่เกิดธุรกรรม (user สามารถเลือกได้)
   
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -103,7 +103,7 @@ model Transaction {
   user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   category      Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
-  @@index([userId, occurredAt])
+  @@index([userId, date])
   @@index([userId, type])
-  @@index([categoryId, occurredAt])
+  @@index([categoryId, date])
 }

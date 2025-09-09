@@ -10,6 +10,7 @@ import authRoutes from './routes/auth.route';
 import authenticate from './middlewares/authenticate';
 import userRoutes from './routes/user.route';
 import sessionRoutes from './routes/session.route';
+import transactionRoutes from './routes/transaction.route';
 
 const PORT = config.PORT || 4000;
 const app = express();
@@ -34,6 +35,7 @@ app.use('/auth', authRoutes);
 
 app.use('/user', authenticate, userRoutes);
 app.use('/session', authenticate, sessionRoutes);
+app.use('/transaction', authenticate, transactionRoutes);
 
 app.use(errorHandler);
 
