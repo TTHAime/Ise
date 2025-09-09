@@ -5,8 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts indek.d.ts",
-    "build": "tsc",
-    "start": "node dist/server.js",
+    "build": "tsc && copy package.json dist\\",
+    "start": "node server.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint src --ext .ts,.js",
