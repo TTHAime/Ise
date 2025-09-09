@@ -4,6 +4,8 @@ import {
   createAccount,
   loginUser,
   refreshUserAccessToken,
+  resetPassword,
+  sendPasswordResetEmail,
   verifyEmail,
 } from '../services/auth.service';
 import appAssert from '../utils/appAssert';
@@ -16,8 +18,10 @@ import {
 } from '../utils/cookie';
 import { AccessTokenPayload, verifyToken } from '../utils/jwt';
 import {
+  emailSchema,
   loginSchema,
   registerSchema,
+  resetPasswordSchema,
   verificationCodeSchema,
 } from './auth.schema';
 
@@ -87,5 +91,28 @@ export const verifyEmailHandler = catchErrors(async (req, res) => {
 
   return res.status(OK).json({
     message: 'Email was successful verifierd',
+  });
+});
+
+export const sendPasswordResetHandler = catchErrors(async (req, res) => {
+  const email = emailSchema.parse(req.body.email);
+
+  await sendPasswordResetEmail(email);
+
+  return res.status(OK).json({
+    message: 'Password reset email sent',
+  });
+});
+
+export const resetPasswordHandler = catchErrors(async (req, res) => {
+  const request = resetPasswordSchema.parse(req.body);
+
+  await resetPassword({
+    password: request.password,
+    verificationCode: request.verificationCode,
+  });
+
+  return clearAuthCookie(res).status(OK).json({
+    message: 'Password reset successful',
   });
 });

@@ -10,8 +10,10 @@ export const StrongPassword = z
     /[[!@#$%^&*(),.?":{}|<>]/,
     'Password must contain at least one special character'
   );
+export const emailSchema = z.email().min(1).max(255);
+
 export const loginSchema = z.object({
-  email: z.email().min(1).max(255),
+  email: emailSchema,
   password: StrongPassword,
   userAgent: z.string().optional(),
 });
@@ -32,4 +34,9 @@ export const registerSchema = loginSchema
 
 export const verificationCodeSchema = z.object({
   code: z.string().min(1, 'Verification code is required'),
+});
+
+export const resetPasswordSchema = z.object({
+  password: StrongPassword,
+  verificationCode: z.string(),
 });
