@@ -1,3 +1,7 @@
+import {
+  CreateTransactionParams,
+  GetTransactionsParams,
+} from '../controllers/z-schema/transaction.schema';
 import { NOT_FOUND } from '../libs/http';
 import { prisma } from '../libs/prisma';
 import appAssert from '../utils/appAssert';
@@ -18,13 +22,6 @@ const selectTransaction = {
       icon: true,
     },
   },
-};
-export type CreateTransactionParams = {
-  amount: number;
-  description?: string;
-  categoryId?: string;
-  type: 'INCOME' | 'EXPENSE';
-  date?: Date;
 };
 
 export const createTransaction = async (
@@ -52,4 +49,54 @@ export const createTransaction = async (
   });
 
   return transaction;
+};
+
+export const getTransactions = async (
+  userId: string,
+  params: GetTransactionsParams
+) => {
+  const { page, limit, type, categoryId, dateFrom, dateTo, search } = params;
+  const skip = (page - 1) * limit;
+  const where = {
+    userId,
+    ...(type ? { type } : {}),
+    ...(categoryId ? { categoryId } : {}),
+    ...(dateFrom || dateTo
+      ? {
+          date: {
+            ...(dateFrom ? { gte: new Date(dateFrom) } : {}),
+            ...(dateTo ? { lte: new Date(dateTo) } : {}),
+          },
+        }
+      : {}),
+    ...(search && search.trim()
+      ? {
+          description: {
+            contains: search.trim(),
+            mode: 'insensitive' as const,
+          },
+        }
+      : {}),
+  };
+
+  const [transactions, total] = await Promise.all([
+    prisma.transaction.findMany({
+      where,
+      select: selectTransaction,
+      orderBy: { date: 'desc' },
+      skip,
+      take: limit,
+    }),
+    prisma.transaction.count({ where }),
+  ]);
+
+  return {
+    transactions,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
 };
