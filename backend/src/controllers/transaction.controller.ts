@@ -1,6 +1,7 @@
-import { BAD_REQUEST, CREATED, OK } from '../libs/http';
+import { BAD_REQUEST, CREATED, NOT_FOUND, OK } from '../libs/http';
 import {
   createTransaction,
+  getTransactionById,
   getTransactions,
 } from '../services/transaction.service';
 import appAssert from '../utils/appAssert';
@@ -27,4 +28,15 @@ export const getTransactionsHandler = catchErrors(async (req, res) => {
   const result = await getTransactions(userId, params);
 
   return res.status(OK).json(result);
+});
+
+export const getTransactionByIdHandler = catchErrors(async (req, res) => {
+  const userId = req.userId;
+  const { id } = req.params;
+  appAssert(userId, BAD_REQUEST, 'User not authenticated');
+
+  const transaction = await getTransactionById(id, userId);
+  appAssert(transaction, NOT_FOUND, 'Transaction not found');
+
+  return res.status(OK).json({ transaction });
 });

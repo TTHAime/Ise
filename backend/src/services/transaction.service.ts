@@ -100,3 +100,12 @@ export const getTransactions = async (
     },
   };
 };
+
+export const getTransactionById = async (id: string, userId: string) => {
+  const transaction = await prisma.transaction.findFirst({
+    where: { id, userId },
+    select: selectTransaction,
+  });
+
+  return transaction;
+};
