@@ -156,3 +156,61 @@ export const deleteTransaction = async (id: string, userId: string) => {
     where: { id, userId },
   });
 };
+
+export const getTransactionStats = async (userId: string) => {
+  const currentDate = new Date();
+  const currentMonthStart = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  );
+  const currentMonthEnd = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    0
+  );
+
+  const [totalIncome, totalExpense, monthlyIncome, monthlyExpense] =
+    await Promise.all([
+      prisma.transaction.aggregate({
+        where: { userId, type: 'INCOME' },
+        _sum: { amount: true },
+      }),
+      prisma.transaction.aggregate({
+        where: { userId, type: 'EXPENSE' },
+        _sum: { amount: true },
+      }),
+      prisma.transaction.aggregate({
+        where: {
+          userId,
+          type: 'INCOME',
+          date: { gte: currentMonthStart, lt: currentMonthEnd },
+        },
+        _sum: { amount: true },
+      }),
+      prisma.transaction.aggregate({
+        where: {
+          userId,
+          type: 'EXPENSE',
+          date: { gte: currentMonthStart, lt: currentMonthEnd },
+        },
+        _sum: { amount: true },
+      }),
+    ]);
+
+  const totalIncomeAmount = Number(totalIncome._sum.amount) || 0;
+  const totalExpenseAmount = Math.abs(Number(totalExpense._sum.amount) || 0); // ใช้ abs เพื่อแสดงเป็นบวก
+  const monthlyIncomeAmount = Number(monthlyIncome._sum.amount) || 0;
+  const monthlyExpenseAmount = Math.abs(
+    Number(monthlyExpense._sum.amount) || 0
+  );
+
+  return {
+    totalIncome: totalIncomeAmount,
+    totalExpense: totalExpenseAmount,
+    monthlyIncome: monthlyIncomeAmount,
+    monthlyExpense: monthlyExpenseAmount,
+    balance: totalIncomeAmount - totalExpenseAmount,
+    monthlyBalance: monthlyIncomeAmount - monthlyExpenseAmount,
+  };
+};
