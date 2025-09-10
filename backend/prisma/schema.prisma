@@ -92,7 +92,7 @@ model Transaction {
   userId        String
   categoryId    String?         // optional - user สามารถไม่เลือกหมวดได้
   type          TransactionType // INCOME หรือ EXPENSE
-  amount        BigInt @db.BigInt
+  amount        Decimal @db.Decimal(20, 2)
   description   String?         // คำอธิบายสั้นๆ เช่น "ซื้อข้าวกล่อง", "เงินเดือนเดือนก.ย."
   
   date    DateTime        // วันที่เกิดธุรกรรม (user สามารถเลือกได้)
