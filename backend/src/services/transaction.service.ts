@@ -145,3 +145,14 @@ export const updateTransaction = async (
   });
   return transaction;
 };
+
+export const deleteTransaction = async (id: string, userId: string) => {
+  const transaction = await prisma.transaction.findFirst({
+    where: { id, userId },
+  });
+  appAssert(transaction, NOT_FOUND, 'Transaction not found');
+
+  await prisma.transaction.delete({
+    where: { id, userId },
+  });
+};

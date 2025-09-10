@@ -1,6 +1,7 @@
 import { BAD_REQUEST, CREATED, NOT_FOUND, OK } from '../libs/http';
 import {
   createTransaction,
+  deleteTransaction,
   getTransactionById,
   getTransactions,
   updateTransaction,
@@ -52,4 +53,14 @@ export const updateTransactionHandler = catchErrors(async (req, res) => {
   const transaction = await updateTransaction(id, userId, data);
 
   return res.status(OK).json({ transaction });
+});
+
+export const deleteTransactionHandler = catchErrors(async (req, res) => {
+  const userId = req.userId;
+  const { id } = req.params;
+  appAssert(userId, BAD_REQUEST, 'User not authenticated');
+
+  await deleteTransaction(id, userId);
+
+  return res.status(OK).json({ messgae: 'Transaction deleted successfully' });
 });
