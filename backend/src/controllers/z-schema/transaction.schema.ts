@@ -8,6 +8,8 @@ export const createTransactionSchema = z.object({
   date: z.coerce.date().optional(),
 });
 
+export const updateTransactionSchema = createTransactionSchema.partial();
+
 export const getTransactionsSchema = z.object({
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(100).default(10),
@@ -19,5 +21,5 @@ export const getTransactionsSchema = z.object({
 });
 
 export type CreateTransactionParams = z.infer<typeof createTransactionSchema>;
-// export type UpdateTransactionParams = z.infer<typeof updateTransactionSchema>;
+export type UpdateTransactionParams = z.infer<typeof updateTransactionSchema>;
 export type GetTransactionsParams = z.infer<typeof getTransactionsSchema>;

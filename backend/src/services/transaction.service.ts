@@ -1,6 +1,7 @@
 import {
   CreateTransactionParams,
   GetTransactionsParams,
+  UpdateTransactionParams,
 } from '../controllers/z-schema/transaction.schema';
 import { NOT_FOUND } from '../libs/http';
 import { prisma } from '../libs/prisma';
@@ -107,5 +108,40 @@ export const getTransactionById = async (id: string, userId: string) => {
     select: selectTransaction,
   });
 
+  return transaction;
+};
+
+export const updateTransaction = async (
+  id: string,
+  userId: string,
+  data: UpdateTransactionParams
+) => {
+  const existingTransaction = await prisma.transaction.findFirst({
+    where: { id, userId },
+    select: selectTransaction,
+  });
+  appAssert(existingTransaction, NOT_FOUND, 'Transaction not found');
+
+  if (data.categoryId) {
+    const category = await prisma.category.findFirst({
+      where: {
+        id: data.categoryId,
+        userId,
+      },
+    });
+    appAssert(category, NOT_FOUND, 'Category not found');
+  }
+
+  const transaction = await prisma.transaction.update({
+    where: { id, userId },
+    data: {
+      ...(data.amount !== undefined && { amount: data.amount }),
+      ...(data.description !== undefined && { description: data.description }),
+      ...(data.type !== undefined && { type: data.type }),
+      ...(data.date !== undefined && { date: data.date }),
+      ...(data.categoryId !== undefined && { categoryId: data.categoryId }),
+    },
+    select: selectTransaction,
+  });
   return transaction;
 };
