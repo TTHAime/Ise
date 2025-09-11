@@ -46,5 +46,4 @@
 	<link rel="icon" href={logo} />
 </svelte:head>
 
-<Navbar />
 {@render children?.()}
