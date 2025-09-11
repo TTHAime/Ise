@@ -38,12 +38,23 @@
 	let { children } = $props();
 </script>
 
+<style lang="postcss">
+	@reference "tailwindcss";
+
+	.mybackground{
+        background: #2A7B9B;
+        background: linear-gradient(62deg, rgba(42, 123, 155, 1) 2%, rgba(87, 199, 133, 0.73) 50%, rgba(183, 237, 83, 1) 100%);
+    }
+
+</style>
+<svelte:head>
+	<link rel="icon" href={logo} />
+</svelte:head>
+<div class="mybackground flex min-h-screen flex-col">
 <Navbar user={user} loginClick={openLogin} signupClick={openSignUp} logoutClick={logout}></Navbar>
 
 <Auth open={authShow} mode={mode} login={login} signup={signup} onClose={closeAuth}> </Auth>
 
-<svelte:head>
-	<link rel="icon" href={logo} />
-</svelte:head>
-
 {@render children?.()}
+
+</div>

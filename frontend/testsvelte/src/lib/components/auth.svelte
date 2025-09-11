@@ -1,41 +1,146 @@
 <script lang="ts">
-    import {fade, scale} from "svelte/transition";
-    import {tick,  onMount} from "svelte";
+	import { fade, scale } from 'svelte/transition';
+	import { tick, onMount } from 'svelte';
 
-    let firstField : HTMLInputElement | null = null;
-    let overlay : HTMLDivElement | null = $state(null);
+	let firstField: HTMLInputElement | null = null;
+	let overlay: HTMLDivElement | null = $state(null);
 
+	let {
+		open = false,
+		mode = 'login',
+		login = () => {},
+		signup = () => {},
+		onClose = () => {}
+	} = $props();
 
-    let { open = false, mode = 'login',login = () => {}, signup = () => {},  onClose = () => {}} = $props();
+	function close() {
+		onClose();
+	}
 
-    function close(){
-        onClose();
+	function Clicklogin() {
+		login();
+	}
+
+    function Clicksignup() {
+        signup();
     }
 
-    function clickBackDrop(e : MouseEvent) {
-        console.log(e.target);
-        if(e.target === e.currentTarget){
-            console.log("click back drop");
-            close();
-        }
-    }
+	function clickBackDrop(e: MouseEvent) {
+		console.log(e.target);
+		if (e.target === e.currentTarget) {
+			console.log('click back drop');
+			close();
+		}
+	}
 
-    async function makeFocus(){
-        await tick();
-        overlay?.focus();
-        firstField?.focus();
-    }
+	async function makeFocus() {
+		await tick();
+		overlay?.focus();
+		firstField?.focus();
+	}
+
+	function passwordhide() {
+		var show = document.getElementById('show');
+		if (show.type == 'text') {
+			show.type = 'password';
+		} else {
+			show.type = 'text';
+		}
+	}
 </script>
 
 <svelte:window on:keydown={(e) => open && e.key === 'Escape' && close()} />
 {#if open}
-    <!-- Backdrop + blur -->
-    <div bind:this={overlay} tabindex="-1" class="fixed inset-0 z-40 backdrop-blur-sm bg-black/50" transition:fade={{duration: 100}}>
-    </div>
+	<!-- Backdrop + blur -->
+	<div
+		bind:this={overlay}
+		tabindex="-1"
+		class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+		transition:fade={{ duration: 100 }}
+	></div>
 
-    <!-- Modal login/sign up -->
-    <div class="fixed z-50 inset-0 flex items-center justify-center pt-4 pb-4 h-md max-h-md overflow-auto" onclick={clickBackDrop} aria-hidden="true">
-        <div role="dialog" aria-modal="true" aria-labelledby="auth-title" class="w-full max-w-md h-full overflow-auto bg-white dark:bg-neutral-900 shadow-xl ring-1 ring-black/5 rounded-2xl" 
-        transition:scale={{duration: 160, start: 0.80}}></div>
-    </div>
+	<!-- Modal login/sign up -->
+	<div
+		class="h-md max-h-md fixed inset-0 z-50 flex items-center justify-center overflow-auto pb-4 pt-4"
+		onclick={clickBackDrop}
+		aria-hidden="true"
+	>
+		<div
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="auth-title"
+			class="h-full w-full max-w-md overflow-auto rounded-2xl bg-white shadow-xl ring-1 ring-black/5 dark:bg-neutral-900"
+			transition:scale={{ duration: 160, start: 0.8 }}
+		>
+            <div style="margin-top: 30%;"></div>
+            <!-- title -->
+            <p class="text-6xl text-center font-black text-gray-900 dark:text-white">LOGIN</p>
+			<div style="margin-top: 40%;"></div>
+			<!-- form -->
+			<form class="mx-auto max-w-sm">
+				<div class="mb-5" >
+					<label for="email" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+						>Email</label
+					>
+					<input
+						type="email"
+						id="email"
+						class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+						placeholder="name@flowbite.com"
+						required
+					/>
+				</div>
+				<div class="mb-5 ">
+					<label for="password" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+						>Your password</label
+					>
+					<input
+						type="password"
+						placeholder="password"
+						name=""
+						id="show"
+						class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+						required
+					/>
+					<div style="margin-top:15px;"></div>
+					<div class="flex items-center">
+						<input
+							checked
+							id="checked-checkbox"
+							type="checkbox"
+                            onclick={passwordhide}
+							value=""
+							class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+						/>
+						<label
+							for="checked-checkbox"
+							class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Hide password</label
+						>
+					</div>
+				</div >
+                <div class="mb-5 flex flex-col items-center">
+                    <button
+                        class="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-lime-200 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 dark:focus:ring-lime-800"
+                        onclick={Clicklogin}
+                    >
+                        <!-- for Show naja -->
+                        <span
+                            class="relative rounded-md bg-white px-20 py-2.5 transition-all duration-75 ease-in group-hover:bg-transparent dark:bg-gray-900 group-hover:dark:bg-transparent"
+                        >
+                            Login
+                        </span>
+                    </button>
+                    <p class="text-1xl font-thin text-gray-900 dark:text-white" style="margin-top: 15px;">OR</p>
+                    <div class="mt-7 flex flex-col gap-2" style="margin-top: 15px;">
+                        <button
+                        class="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"><img
+                            src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"
+                            class="h-[18px] w-[18px] ">Continue with
+                        Google
+                    </button>
+                    </div>
+                </div>
+			</form>
+		</div>
+	</div>
 {/if}
