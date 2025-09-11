@@ -21,6 +21,9 @@ Once you've created a project and installed dependencies with `npm install` (or 
 ```sh
 npm run dev
 
+#if it get ssr error
+npm install -D vite@latest @sveltejs/kit@latest svelte@latest
+
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
 ```

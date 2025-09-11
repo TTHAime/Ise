@@ -2,7 +2,7 @@
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import Navbar from '$lib/components/Navbar.svelte';
-
+	import Register from '$lib/components/Register.svelte';
 	let { children } = $props();
 </script>
 
@@ -11,5 +11,5 @@
 </svelte:head>
 
 <Navbar />
-
+<Register />
 {@render children?.()}
