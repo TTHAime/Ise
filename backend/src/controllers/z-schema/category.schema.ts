@@ -14,4 +14,10 @@ export const createCategorySchema = z.object({
   type: z.enum(['INCOME', 'EXPENSE']),
 });
 
+export const getCategoriesSchema = z.object({
+  type: z.enum(['INCOME', 'EXPENSE']),
+  search: z.string().optional(),
+});
+
 export type CreateCategoryParams = z.infer<typeof createCategorySchema>;
+export type GetCategoriesParams = z.infer<typeof getCategoriesSchema>;

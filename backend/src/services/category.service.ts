@@ -1,4 +1,7 @@
-import { CreateCategoryParams } from '../controllers/z-schema/category.schema';
+import {
+  CreateCategoryParams,
+  GetCategoriesParams,
+} from '../controllers/z-schema/category.schema';
 import { prisma } from '../libs/prisma';
 
 const selectCategory = {
@@ -49,4 +52,32 @@ export const checkCategoryNameExisting = async (
 
   const category = await prisma.category.findFirst({ where });
   return !!category;
+};
+
+export const getCategoies = async (
+  userId: string,
+  params: GetCategoriesParams
+) => {
+  const { type, search } = params;
+
+  const where = {
+    userId,
+    ...(type ? { type } : {}),
+    ...(search?.trim()
+      ? {
+          name: {
+            contains: search.trim(),
+            mode: 'insensitive' as const,
+          },
+        }
+      : {}),
+  };
+
+  const categories = await prisma.category.findMany({
+    where,
+    select: selectCategory,
+    orderBy: [{ name: 'asc' }],
+  });
+
+  return categories;
 };

@@ -1,11 +1,15 @@
-import { BAD_REQUEST, CONFLICT, CREATED } from '../libs/http';
+import { BAD_REQUEST, CONFLICT, CREATED, OK } from '../libs/http';
 import {
   checkCategoryNameExisting,
   createCategory,
+  getCategoies,
 } from '../services/category.service';
 import appAssert from '../utils/appAssert';
 import catchErrors from '../utils/catchErrors';
-import { createCategorySchema } from './z-schema/category.schema';
+import {
+  createCategorySchema,
+  getCategoriesSchema,
+} from './z-schema/category.schema';
 
 export const createCategoryHandler = catchErrors(async (req, res) => {
   const userId = req.userId;
@@ -19,4 +23,14 @@ export const createCategoryHandler = catchErrors(async (req, res) => {
   const category = await createCategory({ ...data, userId });
 
   return res.status(CREATED).json({ category });
+});
+
+export const getCategoriesHandler = catchErrors(async (req, res) => {
+  const userId = req.userId;
+  appAssert(userId, BAD_REQUEST, 'User not authenticated');
+
+  const params = getCategoriesSchema.parse(req.query);
+  const categories = await getCategoies(userId, params);
+
+  return res.status(OK).json({ categories });
 });
