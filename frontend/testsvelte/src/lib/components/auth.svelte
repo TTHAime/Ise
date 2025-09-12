@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade, scale } from 'svelte/transition';
 	import { tick, onMount } from 'svelte';
-	import LoginFrame from "$lib/assets/login_frame.svg";
+	import LoginFrame from "$lib/assets/loginFrame.png";
 	import SignUpFrame from "$lib/assets/signup_frame.svg";
 
 	let firstField: HTMLInputElement | null = null;
@@ -95,11 +95,10 @@
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby="auth-title"
-			class="้h-full w-full max-w-md overflow-auto rounded-2xl bg-[#FFF8EF] bg-cover bg-top bg-no-repeat shadow-xl ring-1 ring-black/5"
-			transition:scale={{ duration: 160, start: 0.8 }}
-			style="background-image: url({SignUpFrame});"
-		>
-			<div style="margin-top: 30%;"></div>
+			class="h-full w-full max-w-md overflow-auto rounded-2xl bg-[#FFF8EF] shadow-xl ring-1 ring-black/5 bg-no-repeat bg-[length:460px_500px] bg-top"
+			transition:scale={{ duration: 160, start: 0.8 }} style="background-image: url('{LoginFrame}');"
+		>	
+            <div style="margin-top: 30%;"></div>
 			{#if mode === 'login'}
 				<!-- title -->
 				<p class="text-center text-6xl font-black text-gray-900">LOG IN</p>
