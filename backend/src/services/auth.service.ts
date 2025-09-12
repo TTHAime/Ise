@@ -23,6 +23,7 @@ import {
 } from '../utils/emailTemplate';
 import { config } from '../libs/config';
 import { selectUserWithoutPassword } from '../utils/omitPassword';
+import { getDefaultCategories } from './category.service';
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -56,6 +57,19 @@ export const createAccount = async (data: CreateAccountParams) => {
       type: VerificationCodeType.EmailVerification,
       expiresAt: addYears(new Date(), 1),
     },
+  });
+
+  // Create default categories for new user
+  const defaultCategories = await getDefaultCategories();
+  await prisma.category.createMany({
+    data: defaultCategories.map(category => ({
+      name: category.name,
+      color: category.color,
+      icon: category.icon,
+      type: category.type as 'INCOME' | 'EXPENSE',
+      userId: user.id,
+    })),
+    skipDuplicates: true, // ป้องกันการสร้างซ้ำ
   });
 
   const url = `${config.APP_ORIGIN}/email/verify/${verificationCode.id}`;

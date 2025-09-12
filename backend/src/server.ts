@@ -5,7 +5,6 @@ import express from 'express';
 import cors from 'cors';
 import errorHandler from './middlewares/errorHandler';
 import { OK } from './libs/http';
-import catchErrors from './utils/catchErrors';
 import authRoutes from './routes/auth.route';
 import authenticate from './middlewares/authenticate';
 import userRoutes from './routes/user.route';

@@ -3,6 +3,7 @@ import {
   checkCategoryNameExisting,
   createCategory,
   getCategoies,
+  getDefaultCategories,
 } from '../services/category.service';
 import appAssert from '../utils/appAssert';
 import catchErrors from '../utils/catchErrors';
@@ -33,4 +34,10 @@ export const getCategoriesHandler = catchErrors(async (req, res) => {
   const categories = await getCategoies(userId, params);
 
   return res.status(OK).json({ categories });
+});
+
+export const getDefaultCategoriesHandler = catchErrors(async (req, res) => {
+  const defaultCategories = await getDefaultCategories();
+
+  return res.status(OK).json({ categories: defaultCategories });
 });

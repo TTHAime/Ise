@@ -81,3 +81,29 @@ export const getCategoies = async (
 
   return categories;
 };
+
+export const getDefaultCategories = async () => {
+  return [
+    // Expense categories
+    { name: 'Food & Dining', color: '#FF6B6B', icon: '🍽️', type: 'EXPENSE' },
+    { name: 'Transportation', color: '#4ECDC4', icon: '🚗', type: 'EXPENSE' },
+    { name: 'Shopping', color: '#45B7D1', icon: '🛍️', type: 'EXPENSE' },
+    { name: 'Entertainment', color: '#96CEB4', icon: '🎬', type: 'EXPENSE' },
+    { name: 'Healthcare', color: '#FFEAA7', icon: '🏥', type: 'EXPENSE' },
+    { name: 'Education', color: '#DDA0DD', icon: '📚', type: 'EXPENSE' },
+    {
+      name: 'Bills & Utilities',
+      color: '#FDA7DF',
+      icon: '📋',
+      type: 'EXPENSE',
+    },
+    { name: 'Travel', color: '#74B9FF', icon: '✈️', type: 'EXPENSE' },
+
+    // Income categories
+    { name: 'Salary', color: '#00B894', icon: '💰', type: 'INCOME' },
+    { name: 'Freelance', color: '#FDCB6E', icon: '💼', type: 'INCOME' },
+    { name: 'Investment', color: '#6C5CE7', icon: '📈', type: 'INCOME' },
+    { name: 'Gift', color: '#FD79A8', icon: '🎁', type: 'INCOME' },
+    { name: 'Other Income', color: '#81ECEC', icon: '💸', type: 'INCOME' },
+  ];
+};
