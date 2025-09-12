@@ -2,6 +2,7 @@ import { BAD_REQUEST, CONFLICT, CREATED, NOT_FOUND, OK } from '../libs/http';
 import {
   checkCategoryNameExisting,
   createCategory,
+  deleteCategory,
   getCategoies,
   getCategoryById,
   getDefaultCategories,
@@ -71,4 +72,14 @@ export const updateCategoryHandler = catchErrors(async (req, res) => {
   const category = await updateCategory(id, userId, data);
 
   return res.status(OK).json({ category });
+});
+
+export const deleteCategoryHandler = catchErrors(async (req, res) => {
+  const userId = req.userId;
+  const { id } = req.params;
+  appAssert(userId, BAD_REQUEST, 'User not authenticated');
+
+  await deleteCategory(id, userId);
+
+  return res.status(OK).json({ message: 'Category deleted successfully' });
 });

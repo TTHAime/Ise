@@ -142,3 +142,12 @@ export const updateCategory = async (
 
   return category;
 };
+
+export const deleteCategory = async (id: string, userId: string) => {
+  const category = await prisma.category.findFirst({
+    where: { id, userId },
+  });
+  appAssert(category, NOT_FOUND, 'Category not found');
+
+  await prisma.category.delete({ where: { id } });
+};
