@@ -1,8 +1,11 @@
 import {
   CreateCategoryParams,
   GetCategoriesParams,
+  UpdateCategoryParams,
 } from '../controllers/z-schema/category.schema';
+import { NOT_FOUND } from '../libs/http';
 import { prisma } from '../libs/prisma';
+import appAssert from '../utils/appAssert';
 
 const selectCategory = {
   id: true,
@@ -114,4 +117,28 @@ export const getDefaultCategories = async () => {
     { name: 'Gift', color: '#FD79A8', icon: '🎁', type: 'INCOME' },
     { name: 'Other Income', color: '#81ECEC', icon: '💸', type: 'INCOME' },
   ];
+};
+
+export const updateCategory = async (
+  id: string,
+  userId: string,
+  data: UpdateCategoryParams
+) => {
+  const existingCategory = await prisma.category.findFirst({
+    where: { id, userId },
+  });
+  appAssert(existingCategory, NOT_FOUND, 'Category not found');
+
+  const category = await prisma.category.update({
+    where: { id },
+    data: {
+      ...(data.name !== undefined && { name: data.name }),
+      ...(data.color !== undefined && { color: data.color }),
+      ...(data.icon !== undefined && { icon: data.icon }),
+      ...(data.type !== undefined && { type: data.type }),
+    },
+    select: selectCategory,
+  });
+
+  return category;
 };
