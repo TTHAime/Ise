@@ -13,7 +13,7 @@
     <ul class="mr-2 justify-center align-middle mt-4 space-x-10">
         <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => console.log("no help")}>Help</button>
         <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => console.log("Hi")}>About Us</button>
-        {#if user}
+    {#if user}
         <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => logoutClick()}>logout</button>
     {:else}
         <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => loginClick()}>log in</button>
