@@ -101,12 +101,12 @@
             <div style="margin-top: 30%;"></div>
 			{#if mode === 'login'}
 				<!-- title -->
-				<p class="text-center text-6xl font-black text-gray-900">LOG IN</p>
+				<p class="head-text-shadow text-center text-6xl font-black text-gray-900">LOG IN</p>
 				<div style="margin-top: 20%;"></div>
 				<!-- form -->
 				<form class="mx-auto max-w-sm" onsubmit={Clicklogin} id="loginform">
 					<div class="mb-5">
-						<label for="email" class="mb-2 block text-sm font-medium text-gray-900">Email</label>
+						<label for="email" class="normal-text mb-2 block text-sm font-medium text-gray-900">Email</label>
 						<input
 							type="email"
 							id="email"
@@ -114,7 +114,7 @@
 							placeholder="name@flowbite.com"
 							required
 						/>
-						<label for="password" class="mb-2 block text-sm font-medium text-gray-900"
+						<label for="password" class="normal-text mb-2 block text-sm font-medium text-gray-900"
 							>Your password</label
 						>
 						<input
@@ -125,7 +125,6 @@
 							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 							required
 						/>
-						<input type="submit"/>
 						<div style="margin-top:15px;"></div>
 						<div class="flex items-center">
 							<input
@@ -136,13 +135,12 @@
 								value=""
 								class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
 							/>
-							<label for="checked-checkbox" class="ms-2 text-sm font-medium text-gray-900"
+							<label for="checked-checkbox" class="normal-text ms-2 text-sm font-medium text-gray-900"
 								>Hide password</label
 							>
 						</div>
 					</div>
 					<div class="mb-5 flex flex-col items-center">
-						<input type="submit">
 						<button
 							type="submit"
 							class="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-lime-200 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 dark:focus:ring-lime-800"
@@ -168,7 +166,7 @@
 					</div>
 				</form>
 			{:else if mode === 'signup'}
-				<p class="text-center text-6xl font-black text-gray-900">SIGN UP</p>
+				<p class="head-text-shadow text-center text-6xl font-black text-gray-900">SIGN UP</p>
 				<div style="margin-top: 20%;"></div>
 				<!-- form -->
 				<form class="mx-auto max-w-sm" id="signupform" onsubmit={() => (Passwordmatch()) ? Clicksignup() : console.log('nope')}>
@@ -183,7 +181,7 @@
 						/>
 						<label
 							for="email"
-							class="mb-2 block text-sm font-medium text-gray-900"
+							class="normal-text mb-2 block text-sm font-medium text-gray-900"
 							style="margin-top: 10px;">Username</label
 						>
 						<input
@@ -195,7 +193,7 @@
 						/>
 						<label
 							for="password"
-							class="mb-2 block text-sm font-medium text-gray-900"
+							class="normal-text mb-2 block text-sm font-medium text-gray-900"
 							style="margin-top: 10px;">Password</label
 						>
 						<input
@@ -208,7 +206,7 @@
 						/>
 						<label
 							for="password"
-							class="mb-2 block text-sm font-medium text-gray-900"
+							class="normal-text mb-2 block text-sm font-medium text-gray-900"
 							style="margin-top: 10px;">Confirm Password</label
 						>
 						<input
@@ -231,7 +229,7 @@
 								value=""
 								class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
 							/>
-							<label for="checked-checkbox" class="ms-2 text-sm font-medium text-gray-900"
+							<label for="checked-checkbox" class="normal-text ms-2 text-sm font-medium text-gray-900"
 								>Hide password</label
 							>
 						</div>
