@@ -1,7 +1,7 @@
 import { VerificationCodeType } from '@prisma/client';
 import { prisma } from '../libs/prisma';
 import { compareValue, hashValue } from '../utils/bcrypt';
-import { addDays, addHours, addMinutes, addYears, subMinutes } from 'date-fns';
+import { addDays, addHours, addYears, subMinutes } from 'date-fns';
 import appAssert from '../utils/appAssert';
 import {
   CONFLICT,

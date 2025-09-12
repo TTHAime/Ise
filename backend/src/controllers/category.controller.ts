@@ -1,8 +1,9 @@
-import { BAD_REQUEST, CONFLICT, CREATED, OK } from '../libs/http';
+import { BAD_REQUEST, CONFLICT, CREATED, NOT_FOUND, OK } from '../libs/http';
 import {
   checkCategoryNameExisting,
   createCategory,
   getCategoies,
+  getCategoryById,
   getDefaultCategories,
 } from '../services/category.service';
 import appAssert from '../utils/appAssert';
@@ -34,6 +35,17 @@ export const getCategoriesHandler = catchErrors(async (req, res) => {
   const categories = await getCategoies(userId, params);
 
   return res.status(OK).json({ categories });
+});
+
+export const getCategoryByIdHandler = catchErrors(async (req, res) => {
+  const userId = req.userId;
+  const { id } = req.params;
+  appAssert(userId, BAD_REQUEST, 'User not authenticated');
+
+  const category = await getCategoryById(id, userId);
+  appAssert(category, NOT_FOUND, 'Category Not found');
+
+  return res.status(OK).json({ category });
 });
 
 export const getDefaultCategoriesHandler = catchErrors(async (req, res) => {

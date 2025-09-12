@@ -82,6 +82,14 @@ export const getCategoies = async (
   return categories;
 };
 
+export const getCategoryById = async (id: string, userId: string) => {
+  const category = await prisma.category.findFirst({
+    where: { id, userId },
+    select: selectCategory,
+  });
+
+  return category;
+};
 export const getDefaultCategories = async () => {
   return [
     // Expense categories
