@@ -8,6 +8,64 @@
 	let firstField: HTMLInputElement | null = null;
 	let overlay: HTMLDivElement | null = $state(null);
 
+	let email:string= $state("");
+	let password:string = $state("");
+	let Confirmpassword:string = $state('');
+	let name :string= $state('');
+	async function handleSubmitlogin() {
+		alert(`Email: ${email}\nPassword: ${password}`);//check bind value for dev
+		let postdata = {
+			email: email,
+			password: password,
+		};
+		const response = await fetch('http://localhost:3000/auth/login', {//naja
+			method: 'POST',
+			headers: {
+				"Content-Type": "application/json",   // <-- tell server this is JSON
+			},
+			body: JSON.stringify(postdata)
+		});
+		console.log("Sending to API:", { email, password });
+		console.log(JSON.stringify(postdata));
+		if (response.ok) {
+		alert('Form submitted successfully!');
+		navigateToHome();//naja
+		login();
+		// Optionally clear form fields or redirect
+		} else {
+		alert('Error submitting form.');
+			const textBody: string = await response.text();
+			alert(textBody);
+		}
+	}
+
+	async function handleSubmitsignup() {
+		alert(`Email: ${email}\nPassword: ${password}`);//check bind value
+		let postdata = {
+			email: email,
+			password: password,
+			confirmpassword: Confirmpassword,
+			name: name
+		};
+		const response = await fetch('http://localhost:3000/auth/register', {//naja
+			method: 'POST',
+			headers: {
+				"Content-Type": "application/json",   // <-- tell server this is JSON
+			},
+			body: JSON.stringify(postdata),
+		});
+		if (response.ok) {
+		alert('Form submitted successfully!');
+		navigateToHome();//naja
+		login();
+		// Optionally clear form fields or redirect
+		} else {
+			const textBody: string = await response.text();
+			console.log("Response text:", textBody);
+			alert(textBody);
+		}
+	}
+
 	let {
 		open = false,
 		mode = 'login',
@@ -32,7 +90,7 @@
 
 	function Clicksignup() {
 		navigateToHome(); //naja
-		signup();
+			signup();
 	}
 
 	function clickBackDrop(e: MouseEvent) {
@@ -112,12 +170,13 @@
 				<p class="head-text-shadow text-center text-6xl font-black text-gray-900">LOG IN</p>
 				<div style="margin-top: 20%;"></div>
 				<!-- form -->
-				<form class="mx-auto max-w-sm" onsubmit={Clicklogin} id="loginform">
+				<form class="mx-auto max-w-sm" onsubmit={handleSubmitlogin} id="loginform">
 					<div class="mb-5">
 						<label for="email" class="normal-text mb-2 block text-sm font-medium text-gray-900">Email</label>
 						<input
 							type="email"
 							id="email"
+							bind:value={email}
 							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 							placeholder="name@flowbite.com"
 							required
@@ -130,6 +189,7 @@
 							placeholder="password"
 							name=""
 							id="password"
+							bind:value={password}
 							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 							required
 						/>
@@ -178,12 +238,13 @@
 				<p class="head-text-shadow text-center text-6xl font-black text-gray-900">SIGN UP</p>
 				<div style="margin-top: 20%;"></div>
 				<!-- form -->
-				<form class="mx-auto max-w-sm" id="signupform" onsubmit={() => (Passwordmatch()) ? Clicksignup() : console.log('nope')}>
+				<form class="mx-auto max-w-sm" id="signupform" onsubmit={() => (Passwordmatch()) ? handleSubmitsignup() : alert('Password still not match!')}>
 					<div class="mb-5">
 						<label for="email" class="mb-2 block text-sm font-medium text-gray-900">Email</label>
 						<input
 							type="email"
 							id="email"
+							bind:value={email}
 							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 							placeholder="name@flowbite.com"
 							required
@@ -196,6 +257,7 @@
 						<input
 							type="text"
 							id="username"
+							bind:value={name}
 							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 							placeholder="Username..."
 							required
@@ -210,6 +272,7 @@
 							placeholder="password"
 							name="password"
 							id="password"
+							bind:value={password}
 							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 							required
 						/>
@@ -224,6 +287,7 @@
 							name="confirm_password"
 							id="confirm_password"
 							onkeyup={Passwordmatch}
+							bind:value={Confirmpassword}
 							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 							required
 						/>
