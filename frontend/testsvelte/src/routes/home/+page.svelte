@@ -1,6 +1,5 @@
 <script lang="ts">
     import logo from "$lib/assets/expenTrack_logo.svg";
-    import auth from "$lib/components/auth.svelte";
 
     let mode = $state('');
 </script>

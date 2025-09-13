@@ -23,7 +23,7 @@
     <label class="text-3xl font-bold bg-gradient-to-r from-blue-500 to-green-400 bg-clip-text text-transparent mr-auto ml-4 mt-2">ExpenTrack</label>
     <ul class="mr-2 justify-center align-middle mt-4 space-x-10">
         <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => navigateTo("")}>Help</button>
-        <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => navigateTo("etc/AboutUs")}>About Us</button>
+        <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => navigateTo("etc")}>About Us</button>
     {#if user}
         <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => logoutClick()}>logout</button>
     {:else}
