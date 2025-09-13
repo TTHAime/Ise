@@ -3,6 +3,7 @@
 	import { tick, onMount } from 'svelte';
 	import LoginFrame from "$lib/assets/loginFrame.png";
 	import SignUpFrame from "$lib/assets/signup_frame.svg";
+	import { goto } from '$app/navigation';
 
 	let firstField: HTMLInputElement | null = null;
 	let overlay: HTMLDivElement | null = $state(null);
@@ -15,15 +16,22 @@
 		onClose = () => {}
 	} = $props();
 
+	function navigateToHome() {
+		event?.preventDefault();
+        goto('home');
+    }
+	
 	function close() {
 		onClose();
 	}
 
 	function Clicklogin() {
+		navigateToHome();//naja
 		login();
 	}
 
 	function Clicksignup() {
+		navigateToHome(); //naja
 		signup();
 	}
 
@@ -155,6 +163,7 @@
 						<p class="text-1xl font-thin text-gray-900" style="margin-top: 15px;">OR</p>
 						<div class="mt-7 flex flex-col gap-2" style="margin-top: 15px;">
 							<button
+								onclick={Clicklogin}
 								class="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
 								><img
 									src="https://www.svgrepo.com/show/475656/google-color.svg"
