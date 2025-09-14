@@ -100,12 +100,6 @@
 		}
 	}
 
-	async function makeFocus() {
-		await tick();
-		overlay?.focus();
-		firstField?.focus();
-	}
-
 
 	function passwordhide() {
 		var password = document.getElementById('password');
