@@ -1,60 +1,102 @@
 <script lang="ts">
 	import '../app.css';
-	import logo from "$lib/assets/expenTrack_logo.svg";
+	import logo from '$lib/assets/expenTrack_logo.svg';
 	import Navbar from '$lib/components/Navbar.svelte';
-	import Auth from "$lib/components/auth.svelte";
+	import Auth from '$lib/components/auth.svelte';
+	import { goto, onNavigate } from '$app/navigation';
 
-	//Just test before Use API
-	type user = {
-		id: Number;
-		name: String;
-	}
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
 
-    let authShow = $state(false);
-    let mode = $state('login');
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
+
+	let authShow = $state(false);
+	let mode = $state('login');
 	let user = $state<user | null>(null);
 
 	async function login() {
 		// call API
-		user = {id : 1, name : 'Time'};
 		authShow = false;
+		goto('/home');
 	}
 
 	async function signup() {
 		// call API
-		user = {id : 1, name : 'Captain'};
 		authShow = false;
 	}
 
-	const openLogin = () => {mode = 'login'; authShow = true;};
-	const openSignUp = () => {mode = 'signup'; authShow = true};
-	const closeAuth = () => {authShow = false;};
-	const logout = () => {user = null;};
+	const openLogin = () => {
+		mode = 'login';
+		authShow = true;
+	};
+	const openSignUp = () => {
+		mode = 'signup';
+		authShow = true;
+	};
 
-	$effect(() => {
-		console.log(authShow);
-	});
+	const closeAuth = () => {
+		authShow = false;
+	};
+	const logout = () => {
+		user = null;
+		goto('/');
+	};
 
 	let { children } = $props();
 </script>
 
-<style lang="postcss">
-	@reference "tailwindcss";
-
-	.mybackground{
-        background: #2A7B9B;
-        background: linear-gradient(62deg, rgba(42, 123, 155, 1) 2%, rgba(87, 199, 133, 0.73) 50%, rgba(183, 237, 83, 1) 100%);
-    }
-
-</style>
 <svelte:head>
 	<link rel="icon" href={logo} />
 </svelte:head>
 <div class="mybackground flex min-h-screen flex-col">
-<Navbar user={user} loginClick={openLogin} signupClick={openSignUp} logoutClick={logout}></Navbar>
+	<Navbar {user} loginClick={openLogin} signupClick={openSignUp} logoutClick={logout}></Navbar>
 
-<Auth open={authShow} mode={mode} login={login} signup={signup} onClose={closeAuth}> </Auth>
+	<Auth open={authShow} {mode} {login} {signup} onClose={closeAuth}></Auth>
 
-{@render children?.()}
-
+	{@render children?.()}
 </div>
+
+<style lang="postcss">
+	@reference "tailwindcss";
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+	}
+
+	@keyframes fade-out {
+		to {
+			opacity: 0;
+		}
+	}
+
+	@keyframes slide-from-right {
+		from {
+			transform: translateX(30px);
+		}
+	}
+
+	@keyframes slide-to-left {
+		to {
+			transform: translateX(-30px);
+		}
+	}
+
+	:root::view-transition-old(root) {
+		animation:
+			90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+			300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+	}
+
+	:root::view-transition-new(root) {
+		animation:
+			210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+			300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+	}
+</style>

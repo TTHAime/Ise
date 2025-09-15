@@ -2,7 +2,29 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
-my-background{
+.mybackground {
         background: #2A7B9B;
         background: linear-gradient(62deg, rgba(42, 123, 155, 1) 2%, rgba(87, 199, 133, 0.73) 50%, rgba(183, 237, 83, 1) 100%);
+}
+
+.white-text-with-blue-shadow {
+        text-shadow:
+                1px 1px 2px black,
+                0 0 1em black,
+                0 0 0.2em black;
+        color: white;
+}
+
+.head-text-shadow {
+        text-shadow: black 4px 4px 10px;
+        color: white;
+}
+
+.normal-text {
+        /*font ตาม figma */
+        font: Inria Sans;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+        color: #000000;
 }
