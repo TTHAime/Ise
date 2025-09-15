@@ -15,11 +15,6 @@
 			});
 		});
 	});
-	//Just test before Use API
-	type user = {
-		id: Number;
-		name: String;
-	};
 
 	let authShow = $state(false);
 	let mode = $state('login');
@@ -27,14 +22,12 @@
 
 	async function login() {
 		// call API
-		user = { id: 1, name: 'Time' };
 		authShow = false;
 		goto('/home');
 	}
 
 	async function signup() {
 		// call API
-		user = { id: 1, name: 'Captain' };
 		authShow = false;
 	}
 
@@ -46,6 +39,7 @@
 		mode = 'signup';
 		authShow = true;
 	};
+
 	const closeAuth = () => {
 		authShow = false;
 	};
@@ -53,10 +47,6 @@
 		user = null;
 		goto('/');
 	};
-
-	$effect(() => {
-		console.log(authShow);
-	});
 
 	let { children } = $props();
 </script>

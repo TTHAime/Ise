@@ -1,16 +1,14 @@
 <script lang="ts">
 	import { fade, scale } from 'svelte/transition';
-	import { tick, onMount } from 'svelte';
 	import LoginFrame from "$lib/assets/loginFrame.png";
-	import SignUpFrame from "$lib/assets/signup_frame.svg";
 	import { goto } from '$app/navigation';
 
 	let firstField: HTMLInputElement | null = null;
 	let overlay: HTMLDivElement | null = $state(null);
 
-	let email:string= $state("");
-	let password:string = $state("");
-	let Confirmpassword:string = $state('');
+	let email:string= $state('');
+	let password:string = $state('');
+	let confirmPassword:string = $state('');
 	let name :string= $state('');
 	async function handleSubmitlogin() {
 		alert(`Email: ${email}\nPassword: ${password}`);//check bind value for dev
@@ -18,7 +16,7 @@
 			email: email,
 			password: password,
 		};
-		const response = await fetch('http://localhost:3000/auth/login', {//naja
+		const response = await fetch('http://localhost:4000/auth/login', {//naja
 			method: 'POST',
 			headers: {
 				"Content-Type": "application/json",   // <-- tell server this is JSON
@@ -44,10 +42,10 @@
 		let postdata = {
 			email: email,
 			password: password,
-			confirmpassword: Confirmpassword,
+			confirmPassword: confirmPassword,
 			name: name
 		};
-		const response = await fetch('http://localhost:3000/auth/register', {//naja
+		const response = await fetch('http://localhost:4000/auth/register', {//naja
 			method: 'POST',
 			headers: {
 				"Content-Type": "application/json",   // <-- tell server this is JSON
@@ -57,7 +55,7 @@
 		if (response.ok) {
 		alert('Form submitted successfully!');
 		navigateToHome();//naja
-		login();
+		signup();
 		// Optionally clear form fields or redirect
 		} else {
 			const textBody: string = await response.text();
@@ -71,8 +69,10 @@
 		mode = 'login',
 		login = () => {},
 		signup = () => {},
-		onClose = () => {}
+		onClose = () => {},
 	} = $props();
+
+
 
 	function navigateToHome() {
 		event?.preventDefault();
@@ -80,6 +80,7 @@
     }
 	
 	function close() {
+		mode = 'login';
 		onClose();
 	}
 
@@ -90,7 +91,11 @@
 
 	function Clicksignup() {
 		navigateToHome(); //naja
-			signup();
+		signup();
+	}
+
+	function forgotPassClick() {
+		mode = 'forgot';
 	}
 
 	function clickBackDrop(e: MouseEvent) {
@@ -188,18 +193,20 @@
 							required
 						/>
 						<div style="margin-top:15px;"></div>
-						<div class="flex items-center">
-							<input
-								checked
-								id="checked-checkbox"
-								type="checkbox"
-								onclick={passwordhide}
-								value=""
-								class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-							/>
-							<label for="checked-checkbox" class="normal-text ms-2 text-sm font-medium text-gray-900"
-								>Hide password</label
-							>
+							<div class="flex justify-between pr-3">
+								<div class="flex items-center">
+								<input
+									checked
+									id="checked-checkbox"
+									type="checkbox"
+									onclick={passwordhide}
+									value=""
+									class="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+								/>
+								<label for="checked-checkbox" class="normal-text ms-2 text-sm font-medium text-gray-900"
+									>Hide password</label>
+							</div>
+							<button class=" hover:underline" onclick={() => {forgotPassClick()}}>forgot password?</button>
 						</div>
 					</div>
 					<div class="mb-5 flex flex-col items-center">
@@ -232,7 +239,7 @@
 				<p class="head-text-shadow text-center text-6xl font-black text-gray-900">SIGN UP</p>
 				<div style="margin-top: 20%;"></div>
 				<!-- form -->
-				<form class="mx-auto max-w-sm" id="signupform" onsubmit={() => (Passwordmatch()) ? handleSubmitsignup() : alert('Password still not match!')}>
+				<form class="mx-auto max-w-sm" id="signupform" onsubmit={(e) => {e.preventDefault; (Passwordmatch())? handleSubmitsignup() : alert('Password still not match!');}}>
 					<div class="mb-5">
 						<label for="email" class="mb-2 block text-sm font-medium text-gray-900">Email</label>
 						<input
@@ -281,7 +288,7 @@
 							name="confirm_password"
 							id="confirm_password"
 							onkeyup={Passwordmatch}
-							bind:value={Confirmpassword}
+							bind:value={confirmPassword}
 							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 							required
 						/>
@@ -324,6 +331,8 @@
 						</div> -->
 					</div>
 				</form>
+			{:else if mode === 'forgot'}
+				<form></form>
 			{/if}
 		</div>
 	</div>
