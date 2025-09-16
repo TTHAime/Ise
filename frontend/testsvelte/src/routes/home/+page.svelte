@@ -1,9 +1,35 @@
 <script lang="ts">
-	import Card from "$lib/components/Compare-line.svelte";
+	import CompareCard from '$lib/components/Compare-line.svelte';
+	import Piechart from '$lib/components/Piechart.svelte';
+	import type { ApexOptions } from 'apexcharts';
 
+	// api data
+	const expenseOptions: ApexOptions = {
+		series: [40, 25, 20, 15],
+		colors: ['#EF4444', '#F97316', '#EAB308', '#06B6D4'],
+		chart: { type: 'pie' },
+		labels: ['Food', 'Rent', 'Utilities', 'Entertainment']
+	};
+
+	const incomeOptions: ApexOptions = {
+		series: [70, 20, 10],
+		colors: ['#22C55E', '#3B82F6', '#A855F7'],
+		chart: { type: 'pie' },
+		labels: ['Salary', 'Investments', 'Other']
+	};
 </script>
-<h1 style="color: black;" class="text-5xl flex justify-center flex-col font-bold text-center mt-20 text-gray-900 dark:text-white">Welcome to home,</h1>
 
-<div class=" mx-4 mt-4 p-10 rounded-md justify-between flex align-middle drop-shadow-lg">
-<Card></Card>
+<div class="mx-auto mt-10 grid max-w-6xl grid-cols-1 gap-14 drop-shadow-lg md:grid-cols-2">
+	<Piechart
+		title="Expense Breakdown"
+		description="This chart shows where your money goes each month."
+		options={expenseOptions}
+		menuType="expense"
+	/>
+	<Piechart
+		title="Income Breakdown"
+		description="This chart shows your different sources of income."
+		options={incomeOptions}
+		menuType="income"
+	/>
 </div>
