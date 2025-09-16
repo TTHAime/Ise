@@ -24,7 +24,6 @@ model User {
   displayName     String?
   profileImage    String?
   
-  totalBalance    Decimal     @default(0) @db.Decimal(18, 2)
 
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
