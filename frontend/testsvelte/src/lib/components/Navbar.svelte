@@ -1,6 +1,7 @@
 <script>
     import logo from "$lib/assets/expenTrack_logo.svg";
     import { goto } from '$app/navigation';
+	import { error } from "@sveltejs/kit";
 
     let {user = null, loginClick=()=>{}, signupClick=() => {}, logoutClick=()=>{}} = $props();
 

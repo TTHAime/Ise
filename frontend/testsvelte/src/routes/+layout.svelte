@@ -22,12 +22,14 @@
 
 	async function login() {
 		// call API
+		getUser();
 		authShow = false;
 		goto('/home');
 	}
 
 	async function signup() {
 		// call API
+		getUser();
 		authShow = false;
 	}
 
@@ -47,6 +49,13 @@
 		user = null;
 		goto('/');
 	};
+
+	async function getUser() {
+        const response = await fetch('http://localhost:4000/user/');
+        if(!response.ok) throw new Error(`HTTP ${response.status}`);
+        user = response.json();
+        console.log(user);
+    }
 
 	let { children } = $props();
 </script>

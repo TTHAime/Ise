@@ -2,9 +2,18 @@
 	import { fade, scale } from 'svelte/transition';
 	import LoginFrame from "$lib/assets/loginFrame.png";
 	import { goto } from '$app/navigation';
+	import { json } from '@sveltejs/kit';
 
 	let firstField: HTMLInputElement | null = null;
 	let overlay: HTMLDivElement | null = $state(null);
+
+	let {
+		open = false,
+		mode = 'login',
+		login = () => {},
+		signup = () => {},
+		onClose = () => {},
+	} = $props();
 
 	let email:string= $state('');
 	let password:string = $state('');
@@ -64,14 +73,6 @@
 		}
 	}
 
-	let {
-		open = false,
-		mode = 'login',
-		login = () => {},
-		signup = () => {},
-		onClose = () => {},
-	} = $props();
-
 
 
 	function navigateToHome() {
@@ -100,7 +101,24 @@
 
 	async function sendVarificationCodeClick(){
 		//api
-		mode = 'sent';
+		alert(`Email ${email}`)
+		let postData = {
+			email : email
+		}
+		const response = await fetch('http://localhost:4000/auth/password/forgot',{
+			method : 'POST',
+			headers : {"Content-type" : "application/json"},
+			body : JSON.stringify(postData)
+		});
+		if(response.ok){
+			const body : string = await response.json();
+			alert(`Message : ${response.json()}`);
+			mode = 'sent';
+		}else{
+			const body : string = await response.json();
+			alert(`Error Message : ${response.json()}`);
+		}
+		
 	}
 
 	async function verifyCode(){
@@ -356,7 +374,7 @@
 						<input type="Email" 
 						class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 						placeholder="Email"
-						name="Email" required>
+						name="Email" required bind:value={email}>
 					</div>
 					<div class="relative flex flex-col items-center w-full h-[100px]">
 						<button type="submit" class="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-lime-200 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 dark:focus:ring-lime-800"
