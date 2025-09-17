@@ -98,6 +98,21 @@
 		mode = 'forgot';
 	}
 
+	async function sendVarificationCodeClick(){
+		//api
+		mode = 'sent';
+	}
+
+	async function verifyCode(){
+		//API
+		mode = 'resetPass';
+	}
+
+	async function resetPassword(){
+		//API
+		mode = 'login'
+	}
+
 	function clickBackDrop(e: MouseEvent) {
 		console.log(e.target);
 		if (e.target === e.currentTarget) {
@@ -235,7 +250,8 @@
 						</div>
 					</div>
 				</form>
-			{:else if mode === 'signup'}
+			{/if}
+			{#if mode === 'signup'}
 				<p class="head-text-shadow text-center text-6xl font-black text-gray-900">SIGN UP</p>
 				<div style="margin-top: 20%;"></div>
 				<!-- form -->
@@ -315,7 +331,7 @@
 						>
 							<!-- for Show naja -->
 							<span
-								class="relative rounded-md bg-white px-20 py-2.5 transition-all duration-75 ease-in group-hover:bg-transparent dark:bg-gray-900 group-hover:dark:bg-transparent"
+								class="relative rounded-md bg-white px-20 py-2.5 font-bold transition-all duration-75 ease-in group-hover:bg-transparent dark:bg-gray-900 group-hover:dark:bg-transparent"
 							>
 								Sign up
 							</span>
@@ -331,8 +347,76 @@
 						</div> -->
 					</div>
 				</form>
-			{:else if mode === 'forgot'}
-				<form></form>
+			{/if}
+			{#if mode === 'forgot'}
+				<p class="mx-auto max-w-sm align-middle head-text-shadow text-center text-5xl font-black text-gray-900">RESET PASSWORD</p>
+				<form class="mx-auto max-w-sm align-middle" onsubmit={(e) =>{{e.preventDefault;}}}>
+					<div class="mt-5 relative flex flex-col h-[150px] w-full justify-center">
+						<span class="text-base font-semibold mb-2 text-gray-900">Email</span>
+						<input type="Email" 
+						class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+						placeholder="Email"
+						name="Email" required>
+					</div>
+					<div class="relative flex flex-col items-center w-full h-[100px]">
+						<button type="submit" class="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-lime-200 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 dark:focus:ring-lime-800"
+						onclick={() => {sendVarificationCodeClick()}}>
+							<span
+								class="relative rounded-md bg-white px-7 py-2.5 font-bold transition-all duration-75 ease-in group-hover:bg-transparent dark:bg-gray-900 group-hover:dark:bg-transparent"
+							>
+								Send Verification Code
+							</span>
+						</button>
+					</div>
+				</form>
+			{/if}
+			{#if mode === 'sent'}
+			<p class="mx-auto max-w-sm align-middle head-text-shadow text-center text-5xl font-black text-gray-900">RESET PASSWORD</p>
+			<form class="mx-auto max-w-sm align-middle" onsubmit={(e) =>{{e.preventDefault;}}}>
+				<div class="mt-5 relative flex flex-col h-[150px] w-full justify-center">
+					<span class="text-base font-semibold mb-2 text-gray-900">Verification Code</span>
+					<input type="Code" 
+					name="Code"
+					placeholder="Verification code"
+					required
+					class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+				</div>
+				<div class="relative flex flex-col items-center w-full h-[100px]">
+						<button type="submit" class="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-lime-200 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 dark:focus:ring-lime-800"
+						onclick={() => {verifyCode()}}>
+							<span
+								class="relative rounded-md bg-white px-7 py-2.5 font-bold transition-all duration-75 ease-in group-hover:bg-transparent dark:bg-gray-900 group-hover:dark:bg-transparent"
+							>
+								Submit
+							</span>
+						</button>
+					</div>
+			</form>
+			{/if}
+			{#if mode === 'resetPass'}
+				<p class="mx-auto max-w-sm align-middle head-text-shadow text-center text-5xl font-black text-gray-900">RESET PASSWORD</p>
+				<form class="mx-auto max-w-sm align-middle" onsubmit={(e) =>{{e.preventDefault;}}}>
+					<div class="mt-5 relative flex flex-col h-[150px] w-full justify-center">
+						<span class="text-base font-semibold mb-2 text-gray-900">New Password</span>
+						<input type="Password" name="NewPass" placeholder="New Password"
+						required
+						class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">
+						<span class="mt-3 text-base font-semibold mb-2 text-gray-900">Confirm New Password</span>
+						<input type="Password" name="ConfirmPass" placeholder="New Password"
+						required
+						class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500">	
+					</div>
+					<div class="relative flex flex-col mt-10 items-center w-full h-[100px]">
+						<button type="submit" class="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-lime-200 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 dark:focus:ring-lime-800"
+							onclick={() => {resetPassword()}}>
+								<span
+									class="relative rounded-md bg-white px-7 py-2.5 font-bold transition-all duration-75 ease-in group-hover:bg-transparent dark:bg-gray-900 group-hover:dark:bg-transparent"
+								>
+									Reset Password
+								</span>
+						</button>
+					</div>
+				</form>
 			{/if}
 		</div>
 	</div>
