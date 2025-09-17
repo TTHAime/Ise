@@ -31,6 +31,7 @@ export type CreateAccountParams = {
   email: string;
   password: string;
   name?: string;
+  profileImage?: string;
   userAgent?: string;
 };
 
@@ -46,6 +47,7 @@ export const createAccount = async (data: CreateAccountParams) => {
     data: {
       email: data.email,
       displayName: data.name,
+      profileImage: data.profileImage,
       passwordHash,
     },
     select: selectUserWithoutPassword,
