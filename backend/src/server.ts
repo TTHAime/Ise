@@ -11,6 +11,7 @@ import userRoutes from './routes/user.route';
 import sessionRoutes from './routes/session.route';
 import transactionRoutes from './routes/transaction.route';
 import categoryRoutes from './routes/category.route';
+import cloudinary from './libs/cloudinary';
 
 const PORT = config.PORT || 4000;
 const app = express();
@@ -48,6 +49,12 @@ async function start() {
   } catch (err) {
     console.error('DB not ready', err);
     process.exit(1);
+  }
+  try {
+    const res = await cloudinary.api.ping();
+    console.log('Cloudinary connected:', res.status);
+  } catch (err) {
+    console.error('Cloudinary connection failed:', err);
   }
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

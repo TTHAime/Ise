@@ -21,6 +21,10 @@ const Env = z.object({
   SMTP_USER: z.email('Must be valid email'),
   SMTP_PASS: z.string().min(1, 'SMTP password required'),
   EMAIL_SENDER: z.email('Must be valid email'),
+
+  CLOUDINARY_CLOUD_NAME: z.string().min(1, 'CLOUDINARY_CLOUD_NAME is required'),
+  CLOUDINARY_API_KEY: z.string().min(1, 'CLOUDINARY_API_KEY is required'),
+  CLOUDINARY_API_SECRET: z.string().min(1, 'CLOUDINARY_API_SECRET is required'),
 });
 
 export const config = Env.parse(process.env);
