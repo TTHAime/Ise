@@ -43,6 +43,9 @@
     display: none;
   }
 }
+.shadow-box{
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
 
 .mybackground {
         background: #2A7B9B;

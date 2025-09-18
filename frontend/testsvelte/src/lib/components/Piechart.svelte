@@ -1,75 +1,52 @@
 <script lang="ts">
+	import analyticpic from '$lib/assets/analytic.png';
 	import type { ApexOptions } from 'apexcharts';
 	import { Chart } from '@flowbite-svelte-plugins/chart';
 	import { Card, A, Button, Dropdown, DropdownItem, Popover } from 'flowbite-svelte';
-	import {
-		InfoCircleSolid,
-		ChevronDownOutline,
-		ChevronRightOutline,
-		PenSolid,
-		DownloadSolid,
-		ShareNodesSolid,
-		TrashBinSolid,
-		DotsHorizontalOutline
-	} from 'flowbite-svelte-icons';
 
-	// Props
 	export let title: string = 'Finance Chart';
 	export let description: string = 'This chart shows your financial breakdown.';
 	export let options: ApexOptions;
-	export let menuType: 'expense' | 'income' = 'expense';
 </script>
 
-
-<!-- size fix later,or maybe if else window size instead -->
-<Card size="xl" class="p-4 sm:p-6 md:p-8 w-[30rem]">
-	<!-- Header -->
-	<div class="flex w-full items-start justify-between">
-		<div class="flex-col items-center">
-			<div class="mb-1 flex items-center">
-				<h5 class="me-1 text-xl font-bold text-gray-900 dark:text-white">{title}</h5>
-
-				<!-- Info icon + popover -->
-				<InfoCircleSolid
-					id="piechart-info"
-					class="ms-1 h-3.5 w-3.5 cursor-pointer text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-				/>
-				<Popover
-					triggeredBy="#piechart-info-trigger"
-					class="shadow-xs z-10 w-72 rounded-lg border border-gray-200 bg-white text-sm text-gray-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400"
-				>
-					<div class="space-y-2 p-3">
-						<h3 class="font-semibold text-gray-900 dark:text-white">{title} info</h3>
-						<p>{description}</p>
-					</div>
-				</Popover>
+<Card
+	size="xl"
+	class="relative mx-auto flex w-full max-w-2xl flex-col p-4 pt-12 sm:p-6 sm:pt-14 md:p-8 md:pt-16"
+>
+	<!-- Floating title pill -->
+	<div class="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/4">
+		<div class="shadow-box mx-2 max-w-3xl rounded-lg bg-white px-4 py-3 sm:px-6 dark:bg-gray-800">
+			<div class="flex items-center gap-2">
+				<h1 class="text-xl font-bold text-gray-900 dark:text-white">{title}</h1>
 			</div>
-		</div>
-
-		<!-- Dropdown menu -->
-		<div class="flex items-center justify-end">
-			<DotsHorizontalOutline id="drop-h" class="dark:text-white" />
-			<Dropdown simple triggeredBy="hop-h-trigger" class="w-44" offset={-6}>
-				{#if menuType === 'expense'}
-					<DropdownItem><PenSolid class="me-2 inline h-3 w-3" /> Edit categories</DropdownItem>
-				{:else}
-					<DropdownItem><PenSolid class="me-2 inline h-3 w-3" /> Edit sources</DropdownItem>
-				{/if}
-				<DropdownItem><DownloadSolid class="me-2 inline h-3 w-3" /> Export data</DropdownItem>
-				<DropdownItem><ShareNodesSolid class="me-2 inline h-3 w-3" /> Share report</DropdownItem>
-				<DropdownItem><TrashBinSolid class="me-2 inline h-3 w-3" /> Delete chart</DropdownItem>
-			</Dropdown>
+			<Popover
+				class="shadow-xs z-10 w-72 rounded-lg border border-gray-200 bg-white text-sm text-gray-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400"
+			>
+				<div class="space-y-2 p-3">
+					<h3 class="font-semibold text-gray-900 dark:text-white">{title} info</h3>
+					<p>{description}</p>
+				</div>
+			</Popover>
 		</div>
 	</div>
 
-	<!-- Chart -->
-	<Chart {options} class="py-6" />
+	<!-- Chart (fixed height so footer moves up) -->
+	<div class="h-56 px-5 md:h-64">
+		<Chart {options} class="h-full w-full" />
+	</div>
 
-	<!-- Footer -->
-	<div class="flex justify-between border-t border-gray-200 pt-5 dark:border-gray-700">
-		<Button class="bg-transparent text-sm text-gray-500 dark:text-gray-400">
-			Last 30 days <ChevronDownOutline class="ms-1 w-2.5" />
-		</Button>
-		<A href="/" class="text-sm font-semibold uppercase hover:underline">View details</A>
+	<!-- Footer (moved up) -->
+	<div class="mt-2 flex justify-end">
+		<A
+			href="/analytics"
+			class="group inline-flex items-center text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+			aria-label="Open analytics"
+		>
+			<img
+				src={analyticpic}
+				alt="Analytics"
+				class="ml-2 h-7 w-7 will-change-transform group-hover:scale-110 motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out"
+			/>
+		</A>
 	</div>
 </Card>
