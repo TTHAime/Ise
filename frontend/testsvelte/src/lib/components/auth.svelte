@@ -3,6 +3,7 @@
 	import LoginFrame from "$lib/assets/loginFrame.png";
 	import { goto } from '$app/navigation';
 	import { json } from '@sveltejs/kit';
+	import { writable } from 'svelte/store';
 
 	let firstField: HTMLInputElement | null = null;
 	let overlay: HTMLDivElement | null = $state(null);
@@ -27,6 +28,7 @@
 		};
 		const response = await fetch('http://localhost:4000/auth/login', {//naja
 			method: 'POST',
+			credentials : 'include',
 			headers: {
 				"Content-Type": "application/json",   // <-- tell server this is JSON
 			},
@@ -56,6 +58,7 @@
 		};
 		const response = await fetch('http://localhost:4000/auth/register', {//naja
 			method: 'POST',
+			credentials : 'include',
 			headers: {
 				"Content-Type": "application/json",   // <-- tell server this is JSON
 			},

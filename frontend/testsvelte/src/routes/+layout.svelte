@@ -4,6 +4,10 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Auth from '$lib/components/auth.svelte';
 	import { goto, onNavigate } from '$app/navigation';
+	import { user, refreshUser, logout} from '$lib/components/auth';
+	import { onMount } from 'svelte';
+
+	// onMount(()=>{refreshUser();});
 
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;
@@ -18,18 +22,14 @@
 
 	let authShow = $state(false);
 	let mode = $state('login');
-	let user = $state<user | null>(null);
 
 	async function login() {
-		// call API
-		getUser();
 		authShow = false;
 		goto('/home');
+		refreshUser();
 	}
 
 	async function signup() {
-		// call API
-		getUser();
 		authShow = false;
 	}
 
@@ -45,17 +45,10 @@
 	const closeAuth = () => {
 		authShow = false;
 	};
-	const logout = () => {
-		user = null;
+	const logedOut = async () => {
+		logout();
 		goto('/');
 	};
-
-	async function getUser() {
-        const response = await fetch('http://localhost:4000/user/');
-        if(!response.ok) throw new Error(`HTTP ${response.status}`);
-        user = response.json();
-        console.log(user);
-    }
 
 	let { children } = $props();
 </script>
@@ -64,7 +57,7 @@
 	<link rel="icon" href={logo} />
 </svelte:head>
 <div class="mybackground flex min-h-screen flex-col">
-	<Navbar {user} loginClick={openLogin} signupClick={openSignUp} logoutClick={logout}></Navbar>
+	<Navbar user={$user} loginClick={openLogin} signupClick={openSignUp} logoutClick={logedOut}></Navbar>
 
 	<Auth open={authShow} {mode} {login} {signup} onClose={closeAuth}></Auth>
 

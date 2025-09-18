@@ -1,10 +1,19 @@
-<script>
+<script lang='ts'>
     import logo from "$lib/assets/expenTrack_logo.svg";
     import { goto } from '$app/navigation';
-	import { error } from "@sveltejs/kit";
+	import { error, json } from "@sveltejs/kit";
+	import { derived } from "svelte/store";
 
-    let {user = null, loginClick=()=>{}, signupClick=() => {}, logoutClick=()=>{}} = $props();
+    const props = $props<{user: unknown; loginClick?: () => void; signupClick?: () => void; logoutClick?: () => void}>();
 
+    const user = $derived(props.user);
+    const loginClick = $derived(props.loginClick ?? (() => {}));
+    const signupClick = $derived(props.signupClick ?? (() => {}));
+    const logoutClick = $derived(props.logoutClick ?? (() => {}));
+
+    const displayName = $derived(user?.user.displayName ?? '');
+
+    
     function navigateTo(where) {
         goto(`/${where}`);
       }
@@ -26,6 +35,7 @@
         <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => navigateTo("")}>Help</button>
         <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => navigateTo("etc")}>About Us</button>
     {#if user}
+        <span>{displayName}</span>
         <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => logoutClick()}>logout</button>
     {:else}
         <button class="cursor-pointer hover:bg-gray-400/50 rounded-sm" type="button" onclick={() => loginClick()}>log in</button>
