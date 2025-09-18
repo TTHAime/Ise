@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Card, Popover } from 'flowbite-svelte';
+    import { Card, Popover,A } from 'flowbite-svelte';
     
 	type TxType = 'INCOME' | 'EXPENSE';
 
@@ -9,16 +9,16 @@
     let data = {//pass in from parent
         title: 'Recent Transactions',
         items: [
-            { id: 1, description: 'Grocery Shopping', amount: 50.75, date: '2025-10-01', type: 'EXPENSE' as TxType },
-            { id: 2, description: 'Electricity Bill', amount: 75.0,  date: '2025-10-03', type: 'EXPENSE' as TxType },
-            { id: 3, description: 'investment', amount: 30.0, date: '2025-10-05', type: 'INCOME' as TxType },
-            { id: 4, description: 'Monthly Subscription', amount: 12.50, date: '2025-10-07', type: 'EXPENSE' as TxType },
-            { id: 5, description: 'Salary', amount: 17800, date: '2025-10-10', type: 'INCOME'  as TxType },//max 5 or not
-            { id: 6, description: 'Freelance Project', amount: 500.0, date: '2025-10-12', type: 'INCOME' as TxType },
-            { id: 7, description: 'Dining Out', amount: 60.0, date: '2025-10-15', type: 'EXPENSE' as TxType },
-            { id: 8, description: 'Gym Membership', amount: 40.0, date: '2025-10-18', type: 'EXPENSE' as TxType },
-            { id: 9, description: 'Book Purchase', amount: 20.0, date: '2025-10-20', type: 'EXPENSE' as TxType },
-            { id: 10, description: 'Car Maintenance', amount: 150.0, date: '2025-10-22', type: 'EXPENSE' as TxType }
+            // { id: 1, description: 'Grocery Shopping', amount: 50.75, date: '2025-10-01', type: 'EXPENSE' as TxType },
+            // { id: 2, description: 'Electricity Bill', amount: 75.0,  date: '2025-10-03', type: 'EXPENSE' as TxType },
+            // { id: 3, description: 'investment', amount: 30.0, date: '2025-10-05', type: 'INCOME' as TxType },
+            // { id: 4, description: 'Monthly Subscription', amount: 12.50, date: '2025-10-07', type: 'EXPENSE' as TxType },
+            // { id: 5, description: 'Salary', amount: 17800, date: '2025-10-10', type: 'INCOME'  as TxType },//max 5 or not
+            // { id: 6, description: 'Freelance Project', amount: 500.0, date: '2025-10-12', type: 'INCOME' as TxType },
+            // { id: 7, description: 'Dining Out', amount: 60.0, date: '2025-10-15', type: 'EXPENSE' as TxType },
+            // { id: 8, description: 'Gym Membership', amount: 40.0, date: '2025-10-18', type: 'EXPENSE' as TxType },
+            // { id: 9, description: 'Book Purchase', amount: 20.0, date: '2025-10-20', type: 'EXPENSE' as TxType },
+            // { id: 10, description: 'Car Maintenance', amount: 150.0, date: '2025-10-22', type: 'EXPENSE' as TxType }
         ]
     };
 	// let data = {
@@ -91,7 +91,12 @@
 				<div class="text-3xl">🗒️</div>
 				<p class="text-sm font-medium text-gray-900 dark:text-white">No transactions yet</p>
 				<p class="text-xs text-gray-500 dark:text-gray-400">Add an income or expense to see it here.</p>
-				<slot name="emptyAction" />
+				<A
+					href="/Transaction"
+					class="group inline-flex items-center text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+					aria-label="Open analytics"
+				>Add transaction
+				</A>
 			</div>
 		{/if}
 	</div>

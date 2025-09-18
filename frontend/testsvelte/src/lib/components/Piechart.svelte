@@ -2,11 +2,15 @@
 	import analyticpic from '$lib/assets/analytic.png';
 	import type { ApexOptions } from 'apexcharts';
 	import { Chart } from '@flowbite-svelte-plugins/chart';
-	import { Card, A, Button, Dropdown, DropdownItem, Popover } from 'flowbite-svelte';
+	import { Card, A, Popover } from 'flowbite-svelte';
 
 	export let title: string = 'Finance Chart';
 	export let description: string = 'This chart shows your financial breakdown.';
 	export let options: ApexOptions;
+
+	const hasData = (opts?: ApexOptions): boolean => {
+		return (!opts) ? false : true;
+	};
 </script>
 
 <Card
@@ -30,12 +34,33 @@
 		</div>
 	</div>
 
-	<!-- Chart (fixed height so footer moves up) -->
-	<div class="h-56 px-5 md:h-64">
-		<Chart {options} class="h-full w-full" />
-	</div>
+	<!-- Chart / Empty state (fixed height so footer stays aligned) -->
+	{#if hasData(options)}
+		<div class="h-56 px-5 md:h-64">
+			<Chart {options} class="h-full w-full" />
+		</div>
+	{:else}
+		<div
+			class="h-56 md:h-64 px-5 flex items-center justify-center"
+			aria-live="polite"
+		>
+			<div class="flex w-full max-w-md flex-col items-center gap-2 rounded-lg border border-dashed border-gray-300 p-6 text-center dark:border-gray-700">
+				<div class="text-3xl">📉</div>
+				<p class="text-sm font-medium text-gray-900 dark:text-white">No data yet</p>
+				<p class="text-xs text-gray-500 dark:text-gray-400">
+					Add some transactions to see your chart.
+				</p>
+				<A
+					href="/Transaction"
+					class="group inline-flex items-center text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+					aria-label="Open analytics"
+				>Add transaction
+				</A>
+			</div>
+		</div>
+	{/if}
 
-	<!-- Footer (moved up) -->
+	<!-- Footer -->
 	<div class="mt-2 flex justify-end">
 		<A
 			href="/analytics"
