@@ -1,4 +1,6 @@
 <script lang="ts">
+	import TransactionList from '$lib/components/Translist.svelte';
+	import Summary from '$lib/components/Summary.svelte'
 	import CompareCard from '$lib/components/Compare-line.svelte';
 	import Piechart from '$lib/components/Piechart.svelte';
 	import type { ApexOptions } from 'apexcharts';
@@ -46,9 +48,10 @@
 			}
 		}
 	};
+
 </script>
 
-<div class="mx-auto mt-10 grid max-w-6xl grid-cols-1 gap-14 drop-shadow-lg md:grid-cols-2">
+<div class="mx-auto mt-10 grid max-w-6xl grid-cols-1 gap-8 drop-shadow-lg md:grid-cols-2">
 	<Piechart
 		title="Expense"
 		description="This chart shows where your money goes each month."
@@ -59,4 +62,6 @@
 		description="This chart shows your different sources of income."
 		options={incomeOptions}
 	/>
+	<TransactionList/>
+	<Summary/>
 </div>
