@@ -13,8 +13,7 @@
 
 <Card
 	size="xl"
-	class="relative mx-auto flex h-auto min-h-0 w-full max-w-2xl flex-col self-start
-	       p-4 pt-12 sm:p-6 sm:pt-14 md:p-8 md:pt-16"
+	class="relative mx-auto flex h-auto min-h-0 w-full max-w-2xl flex-col self-start p-4 pt-12 sm:p-6 sm:pt-14 md:p-8 md:pt-16"
 >
 	<!-- Floating title pill -->
 	<div class="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/4">

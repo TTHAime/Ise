@@ -6,7 +6,7 @@
 	import type { ApexOptions } from 'apexcharts';
 
 	let chartsize = 430;
-	// api data
+	// api data and format
 	const expenseOptions: ApexOptions = {
 		series: [40, 25, 20, 15],
 		colors: ['#EF4444', '#F97316', '#EAB308', '#06B6D4'],
@@ -27,7 +27,6 @@
 			}
 		}
 	};
-
 	const incomeOptions: ApexOptions = {
 		series: [190, 20, 10],
 		colors: ['#22C55E', '#3B82F6', '#A855F7'],
