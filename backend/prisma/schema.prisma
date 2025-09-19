@@ -22,8 +22,8 @@ model User {
   email           String      @unique
   passwordHash    String
   displayName     String?
-  profileImage    String?
-  
+  profileImage    String?     // CLoundinary Url 
+  profileImagePublicId   String?  // CLoundinary public_id for delete picture
 
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt

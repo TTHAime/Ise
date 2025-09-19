@@ -12,9 +12,17 @@ import sessionRoutes from './routes/session.route';
 import transactionRoutes from './routes/transaction.route';
 import categoryRoutes from './routes/category.route';
 import cloudinary from './libs/cloudinary';
+import helmet from 'helmet';
 
 const PORT = config.PORT || 4000;
 const app = express();
+
+app.use(
+  helmet({
+    contentSecurityPolicy: process.env.NODE_ENV === 'production',
+    crossOriginEmbedderPolicy: process.env.NODE_ENV === 'production',
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
