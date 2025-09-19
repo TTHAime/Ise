@@ -55,6 +55,7 @@
 
 <svelte:head>
 	<link rel="icon" href={logo} />
+	<title>ExpenTrack</title>
 </svelte:head>
 <div class="mybackground flex min-h-screen flex-col">
 	<Navbar user={$user} loginClick={openLogin} signupClick={openSignUp} logoutClick={logedOut}></Navbar>
