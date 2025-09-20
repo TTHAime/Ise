@@ -1,6 +1,10 @@
 import { NOT_FOUND, OK } from '../libs/http';
 import { prisma } from '../libs/prisma';
-import { changePassword, updateDisplayName, updateProfileImg } from '../services/user.service';
+import {
+  changePassword,
+  updateDisplayName,
+  updateProfileImg,
+} from '../services/user.service';
 import appAssert from '../utils/appAssert';
 import catchErrors from '../utils/catchErrors';
 import { clearAuthCookie } from '../utils/cookie';

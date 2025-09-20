@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import sharp from 'sharp';
 import {
   loginHandler,
   logoutHandler,

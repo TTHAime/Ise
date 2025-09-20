@@ -1,0 +1,11 @@
+**please อ่าน**
+config cloudinary ตาม doc ด้วยครับ
+api change
+-register ไม่รับ name แล้ว
+
+api add
+-update displayName
+-upload profileImg ได้แล้ว (config clound ด้วยครับ)
+
+by the way:
+register กรอก mail password ต้องไปอีกหน้าเพื่อสร้าง profile
