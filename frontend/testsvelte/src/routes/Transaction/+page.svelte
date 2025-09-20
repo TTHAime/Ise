@@ -1,6 +1,8 @@
 <script lang="ts">
 	import AddTransaction from '$lib/components/AddTransaction.svelte';
 	import TransactionCard from '$lib/components/TransactionCard.svelte';
+	import TransList from '$lib/components/TransactionList.svelte';
+	import { onMount } from 'svelte';
 	const symbolLeft = '<';
 	const symbolRight = '>';
 	let label = $state('Date');
@@ -26,28 +28,28 @@
 	async function SubmitTransaction(p) {
 		console.log(p);
 		Addshow = false;
-        let postdata = {
+		let postdata = {
 			amount: p.amount,
-            description: p.note,
-            type: p.type,
-            date: "2025-09-09T12:30:00.000Z",
-            categoryId: "cmfgbmjdw000ew93s96v1ic9b" //parsing required na dewi pap
+			description: p.note,
+			type: p.type,
+			date: '2025-09-09T12:30:00.000Z',
+			categoryId: 'cmfgbmjdw000ew93s96v1ic9b' //parsing required na dewi pap
 		};
 		const response = await fetch('http://localhost:4000/transaction/', {
 			method: 'POST',
-			credentials : 'include',
+			credentials: 'include',
 			headers: {
-				"Content-Type": "application/json",   // <-- tell server this is JSON
+				'Content-Type': 'application/json' // <-- tell server this is JSON
 			},
 			body: JSON.stringify(postdata)
 		});
-		console.log("Sending to API:", { postdata });
+		console.log('Sending to API:', { postdata });
 		console.log(JSON.stringify(postdata));
 		if (response.ok) {
-		alert('Add submitted successfully!');
-		// Optionally clear form fields or redirect
+			alert('Add submitted successfully!');
+			// Optionally clear form fields or redirect
 		} else {
-		alert('Error submitting.');
+			alert('Error submitting.');
 			const textBody: string = await response.text();
 			alert(textBody);
 		}
@@ -57,23 +59,22 @@
 <AddTransaction
 	open={Addshow}
 	onClose={() => (Addshow = false)}
-	categories={categories}
-	currencies={['THB','USD','JPY']}
+	{categories}
+	currencies={['THB', 'USD', 'JPY']}
 	onPrevPeriod={() => console.log('prev')}
 	onNextPeriod={() => console.log('next')}
-	onSubmit={(p) =>SubmitTransaction(p)}
+	onSubmit={(p) => SubmitTransaction(p)}
 />
 
-<div>
-	<div class="mx-20 mt-10 flex justify-between">
+<div class="px-6 md:px-20 py-10">
+	<div class="flex justify-between">
 		<div
 			class="flex items-center justify-center rounded-xl bg-gradient-to-b from-[#86D988] to-[#5AA698]"
 		>
 			<!--Add Transaction button-->
 			<button
 				name="Add Transaction"
-				class="text-white flex items-center justify-center p-3 font-mono font-semibold hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-xl hover:shadow-emerald-500/35"
-                
+				class="flex items-center justify-center p-3 font-mono font-semibold text-white hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-xl hover:shadow-emerald-500/35"
 				onclick={() => (Addshow = true)}
 			>
 				+ Add Transaction
@@ -104,7 +105,7 @@
 		</div>
 	</div>
 
-	<div class="mx-20 mt-10 grid grid-cols-1 gap-40 md:grid-cols-3">
+	<div class="mt-10 grid grid-cols-1 gap-10 md:grid-cols-3">
 		<TransactionCard
 			title="Current Wallet Balance"
 			value={300.0}
@@ -114,9 +115,19 @@
 			currency="THB"
 			currencyDisplay="code"
 			negative={false}
-		></TransactionCard>
+		/>
 		<TransactionCard
-			title="Total Peroid Expenses"
+			title="Total Period Expenses"
+			value={-300.0}
+			format="currency"
+			decimals={2}
+			locale="en-GB"
+			currency="THB"
+			currencyDisplay="code"
+			negative={true}
+		/>
+		<TransactionCard
+			title="Total Period Income"
 			value={300.0}
 			format="currency"
 			decimals={2}
@@ -124,16 +135,9 @@
 			currency="THB"
 			currencyDisplay="code"
 			negative={false}
-		></TransactionCard>
-		<TransactionCard
-			title="Total Peroid Income"
-			value={300.0}
-			format="currency"
-			decimals={2}
-			locale="en-GB"
-			currency="THB"
-			currencyDisplay="code"
-			negative={false}
-		></TransactionCard>
+		/>
+	</div>
+	<div class="mt-10">
+		<TransList />
 	</div>
 </div>
