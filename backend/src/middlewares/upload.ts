@@ -17,16 +17,12 @@ const imageFileFilter: multer.Options['fileFilter'] = (req, file, cb) => {
   }
 };
 
-const storage = multer.diskStorage({
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage,
   fileFilter: imageFileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 }, // จำกัดขนาด 5MB
+  limits: { fileSize: 10 * 1024 * 1024 }, // จำกัดขนาด 10MB
 });
 
 export default upload;

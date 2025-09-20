@@ -30,8 +30,6 @@ const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 export type CreateAccountParams = {
   email: string;
   password: string;
-  name?: string;
-  profileImage?: string;
   userAgent?: string;
 };
 
@@ -46,8 +44,6 @@ export const createAccount = async (data: CreateAccountParams) => {
   const user = await prisma.user.create({
     data: {
       email: data.email,
-      displayName: data.name,
-      profileImage: data.profileImage,
       passwordHash,
     },
     select: selectUserWithoutPassword,

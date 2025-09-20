@@ -21,12 +21,6 @@ export const loginSchema = z.object({
 export const registerSchema = loginSchema
   .extend({
     confirmPassword: z.string().min(6).max(255),
-    name: z
-      .string()
-      .min(1, 'Name must be at least 1 characters long')
-      .max(50, 'Name must not exceed 50 characters')
-      .optional(),
-    profileImage: z.url().optional(),
   })
   .refine(data => data.password === data.confirmPassword, {
     message: 'Password do not match',

@@ -9,6 +9,12 @@ import { compareValue, hashValue } from '../utils/bcrypt';
 import { getPasswordChangedTemplate } from '../utils/emailTemplate';
 import { selectUserWithoutPassword } from '../utils/omitPassword';
 import { sendMail } from '../utils/sendmail';
+import { uploadImageBuffer } from '../utils/uploadImage';
+
+export interface updateProfileImgInput {
+  userId: string;
+  fileBuffer?: Buffer;
+}
 
 export const updateDisplayName = async (
   userId: string,
@@ -17,6 +23,33 @@ export const updateDisplayName = async (
   const user = await prisma.user.update({
     where: { id: userId },
     data: { displayName: data.name },
+    select: selectUserWithoutPassword,
+  });
+
+  return user;
+};
+
+export const updateProfileImg = async (input: updateProfileImgInput) => {
+  const { userId, fileBuffer } = input;
+  let profileImage: string | undefined;
+  let profileImagePublicId: string | undefined;
+
+  if (fileBuffer) {
+    const img = await uploadImageBuffer(fileBuffer, {
+      folder: 'profiles',
+      prefix: `user_${userId}_profile`,
+      naming: 'stable',
+      overwrite: true,
+    });
+    profileImage = img.secureUrl;
+    profileImagePublicId = img.publicId;
+  }
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      profileImage: profileImage,
+      profileImagePublicId: profileImagePublicId,
+    },
     select: selectUserWithoutPassword,
   });
 
