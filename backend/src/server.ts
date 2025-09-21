@@ -13,6 +13,7 @@ import transactionRoutes from './routes/transaction.route';
 import categoryRoutes from './routes/category.route';
 import cloudinary from './libs/cloudinary';
 import helmet from 'helmet';
+import { createWorker } from 'tesseract.js';
 
 const PORT = config.PORT || 4000;
 const app = express();
@@ -63,6 +64,13 @@ async function start() {
     console.log('Cloudinary connected:', res.status);
   } catch (err) {
     console.error('Cloudinary connection failed:', err);
+  }
+  try {
+    const worker = await createWorker('tha+eng');
+    console.log('[OCR] Tesseract worker ready ✅');
+    await worker.terminate();
+  } catch (err) {
+    console.error('[OCR] Tesseract failed ❌', err);
   }
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

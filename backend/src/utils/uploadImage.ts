@@ -5,7 +5,7 @@ import { Readable } from 'stream';
 export type OutputFormat = 'webp' | 'jpeg' | 'png';
 export type NamingMode = 'unique' | 'stable';
 
-export interface UploadImageOptions {
+export interface UploadImg_CloundOptions {
   folder: string;
   prefix?: string;
   naming?: NamingMode;
@@ -16,7 +16,7 @@ export interface UploadImageOptions {
   format?: OutputFormat;
 }
 
-export interface UploadedImageInfo {
+export interface UploadedImg_CloundInfo {
   url: string;
   secureUrl: string;
   publicId: string;
@@ -32,7 +32,7 @@ const randomSuffix = (len = 8): string =>
     .toString(36)
     .slice(2, 2 + len);
 
-export async function uploadImageBuffer(
+export async function uploadImgBuffer_Clound(
   fileBuffer: Buffer,
   {
     folder,
@@ -43,8 +43,8 @@ export async function uploadImageBuffer(
     height = 500,
     quality = 80,
     format = 'webp',
-  }: UploadImageOptions
-): Promise<UploadedImageInfo> {
+  }: UploadImg_CloundOptions
+): Promise<UploadedImg_CloundInfo> {
   // 1) resize/compress
   const processed = await sharp(fileBuffer)
     .resize(width, height, { fit: 'cover', withoutEnlargement: true })

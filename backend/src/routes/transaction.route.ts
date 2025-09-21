@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  createTransactionBySlipHandler,
   createTransactionHandler,
   deleteTransactionHandler,
   getTransactionByIdHandler,
@@ -7,10 +8,16 @@ import {
   getTransactionStatsHandler,
   updateTransactionHandler,
 } from '../controllers/transaction.controller';
+import upload from '../middlewares/upload';
 
 const transactionRoutes = Router();
 
 transactionRoutes.post('/', createTransactionHandler);
+transactionRoutes.post(
+  '/slip',
+  upload.single('image'),
+  createTransactionBySlipHandler
+);
 transactionRoutes.get('/', getTransactionsHandler);
 transactionRoutes.get('/stats', getTransactionStatsHandler);
 transactionRoutes.get('/:id', getTransactionByIdHandler);

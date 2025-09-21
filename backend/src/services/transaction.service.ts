@@ -3,9 +3,10 @@ import {
   GetTransactionsParams,
   UpdateTransactionParams,
 } from '../controllers/z-schema/transaction.schema';
-import { NOT_FOUND } from '../libs/http';
+import { BAD_REQUEST, NOT_FOUND } from '../libs/http';
 import { prisma } from '../libs/prisma';
 import appAssert from '../utils/appAssert';
+import { ocrSlip } from '../utils/ocrSlip';
 
 const selectTransaction = {
   id: true,
@@ -50,6 +51,36 @@ export const createTransaction = async (
   });
 
   return transaction;
+};
+
+export interface createTransactionBySlipInput {
+  userId: string;
+  fileBuffer?: Buffer;
+}
+
+export const createTransactionBySlip = async (
+  input: createTransactionBySlipInput
+) => {
+  const { userId, fileBuffer } = input;
+  if (!fileBuffer) {
+    appAssert(fileBuffer, BAD_REQUEST, 'File buffer is required');
+  }
+  const ocrData = await ocrSlip(fileBuffer);
+
+  const transaction = await prisma.transaction.create({
+    data: {
+      amount: ocrData.amount ? parseFloat(ocrData.amount) : 0,
+      type: 'EXPENSE',
+      date: ocrData.date ? new Date(ocrData.date) : new Date(),
+      userId: userId,
+    },
+    select: selectTransaction,
+  });
+
+  return {
+    transaction,
+    ocrData,
+  };
 };
 
 export const getTransactions = async (

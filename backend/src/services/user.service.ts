@@ -9,7 +9,7 @@ import { compareValue, hashValue } from '../utils/bcrypt';
 import { getPasswordChangedTemplate } from '../utils/emailTemplate';
 import { selectUserWithoutPassword } from '../utils/omitPassword';
 import { sendMail } from '../utils/sendmail';
-import { uploadImageBuffer } from '../utils/uploadImage';
+import { uploadImgBuffer_Clound } from '../utils/uploadImage';
 
 export interface updateProfileImgInput {
   userId: string;
@@ -35,7 +35,7 @@ export const updateProfileImg = async (input: updateProfileImgInput) => {
   let profileImagePublicId: string | undefined;
 
   if (fileBuffer) {
-    const img = await uploadImageBuffer(fileBuffer, {
+    const img = await uploadImgBuffer_Clound(fileBuffer, {
       folder: 'profiles',
       prefix: `user_${userId}_profile`,
       naming: 'stable',

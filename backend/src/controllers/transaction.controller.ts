@@ -1,6 +1,7 @@
 import { BAD_REQUEST, CREATED, NOT_FOUND, OK } from '../libs/http';
 import {
   createTransaction,
+  createTransactionBySlip,
   deleteTransaction,
   getTransactionById,
   getTransactions,
@@ -23,6 +24,18 @@ export const createTransactionHandler = catchErrors(async (req, res) => {
   const transaction = await createTransaction({ ...data, userId });
 
   return res.status(CREATED).json({ transaction });
+});
+
+export const createTransactionBySlipHandler = catchErrors(async (req, res) => {
+  const userId = req.userId;
+  appAssert(userId, BAD_REQUEST, 'User not authenticated');
+
+  const transaction = await createTransactionBySlip({
+    userId,
+    fileBuffer: req.file?.buffer,
+  });
+
+  res.status(OK).json({ transaction });
 });
 
 export const getTransactionsHandler = catchErrors(async (req, res) => {
