@@ -58,7 +58,9 @@
 	<title>ExpenTrack</title>
 </svelte:head>
 <div class="mybackground flex min-h-screen flex-col">
-	<Navbar user={$user} loginClick={openLogin} signupClick={openSignUp} logoutClick={logedOut}></Navbar>
+	<div class="sticky top-0 z-50">
+		<Navbar user={$user} loginClick={openLogin} signupClick={openSignUp} logoutClick={logedOut}></Navbar>
+	</div>
 
 	<Auth open={authShow} {mode} {login} {signup} onClose={closeAuth}></Auth>
 
