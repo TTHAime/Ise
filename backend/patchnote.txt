@@ -9,3 +9,7 @@ api add
 
 by the way:
 register กรอก mail password ต้องไปอีกหน้าเพื่อสร้าง profile
+
+9/21/68
+add createTransactionBySlip ใช้ ai OCR
+ไม่แม่น 100% เพราะฉะนั้น เมื่อให้ผู้ใช้ upload เสร็จทำหน้าให้ update/แก้ต่อด้วย ต่อด้วยเพื่อให้่ถูกต้องสมบูรณ์
