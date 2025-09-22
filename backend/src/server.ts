@@ -15,6 +15,7 @@ import cloudinary from './libs/cloudinary';
 import helmet from 'helmet';
 import { createWorker } from 'tesseract.js';
 import dashboardRoutes from './routes/dashboard.route';
+import reportRoutes from './routes/report.route';
 
 const PORT = config.PORT || 4000;
 const app = express();
@@ -49,6 +50,7 @@ app.use('/session', authenticate, sessionRoutes);
 app.use('/transaction', authenticate, transactionRoutes);
 app.use('/category', authenticate, categoryRoutes);
 app.use('/dashboard', authenticate, dashboardRoutes);
+app.use('/report', authenticate, reportRoutes);
 
 app.use(errorHandler);
 
