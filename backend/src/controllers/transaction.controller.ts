@@ -3,7 +3,6 @@ import {
   createTransaction,
   createTransactionBySlip,
   deleteTransaction,
-  getDashboardStats,
   getTransactionById,
   getTransactions,
   updateTransaction,
@@ -77,16 +76,4 @@ export const deleteTransactionHandler = catchErrors(async (req, res) => {
   await deleteTransaction(id, userId);
 
   return res.status(OK).json({ messgae: 'Transaction deleted successfully' });
-});
-
-export const getDashboardHandler = catchErrors(async (req, res) => {
-  const userId = req.userId;
-  appAssert(userId, BAD_REQUEST, 'User not authenticated');
-
-  const stats = await getDashboardStats(userId);
-
-  return res.status(OK).json({
-    message: 'Dashboard stats retrieved successfully',
-    data: stats,
-  });
 });

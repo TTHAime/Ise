@@ -3,7 +3,6 @@ import {
   createTransactionBySlipHandler,
   createTransactionHandler,
   deleteTransactionHandler,
-  getDashboardHandler,
   getTransactionByIdHandler,
   getTransactionsHandler,
   updateTransactionHandler,
@@ -19,9 +18,6 @@ transactionRoutes.post(
   createTransactionBySlipHandler
 );
 transactionRoutes.get('/', getTransactionsHandler);
-
-transactionRoutes.get('/dashboard', getDashboardHandler);
-
 transactionRoutes.get('/:id', getTransactionByIdHandler);
 transactionRoutes.patch('/:id', updateTransactionHandler);
 transactionRoutes.delete('/:id', deleteTransactionHandler);
