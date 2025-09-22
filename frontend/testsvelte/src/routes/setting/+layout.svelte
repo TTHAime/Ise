@@ -4,9 +4,9 @@
     const items = [ {label: 'Account', href: '/setting/account'}, {label: 'Category', href: '/setting/category'} ];
 </script>
 
-<div class="min-h-[87vh] grid grid-cols-[240px_1fr] gap-6">
+<div class="min-h-[87vh] grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6">
     <!-- leftside menu -->
-     <nav class=" rounded-l-2xl bg-[#FFF8EF] mx-4 mt-2 pl-3 pt-2 max-lg:flex max-lg:overflow-x-auto">
+     <nav class="h-full rounded-l-2xl bg-[#FFF8EF] mx-4 mt-2 pl-3 pt-2 max-lg:flex max-lg:overflow-x-auto">
         <span class="mx-3 font-bold text-3xl">Setting</span>
         <div class="mt-7">
             {#each items as it}
