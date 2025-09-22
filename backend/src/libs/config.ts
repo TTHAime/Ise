@@ -1,11 +1,14 @@
 import 'dotenv/config';
 import { z } from 'zod';
 
+const timeZoneRegex = /^[A-Za-z_]+\/[A-Za-z_]+$/;
+
 const Env = z.object({
   NODE_ENV: z
     .enum(['development', 'test', 'production'])
     .default('development'),
   DATABASE_URL: z.url(),
+  TZ: z.string().regex(timeZoneRegex, 'Invalid timezone format'),
   PORT: z.coerce.number().default(3000),
   JWT_ACCESS_SECRET: z
     .string()

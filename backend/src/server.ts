@@ -51,6 +51,8 @@ app.use('/category', authenticate, categoryRoutes);
 app.use(errorHandler);
 
 async function start() {
+  console.log('TZ =', process.env.TZ);
+  console.log('Now =', new Date().toString());
   try {
     await prisma.$connect();
     await prisma.$queryRaw`SELECT 1`;
