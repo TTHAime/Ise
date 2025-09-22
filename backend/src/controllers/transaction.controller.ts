@@ -3,9 +3,9 @@ import {
   createTransaction,
   createTransactionBySlip,
   deleteTransaction,
+  getDashboardStats,
   getTransactionById,
   getTransactions,
-  getTransactionStats,
   updateTransaction,
 } from '../services/transaction.service';
 import appAssert from '../utils/appAssert';
@@ -79,11 +79,14 @@ export const deleteTransactionHandler = catchErrors(async (req, res) => {
   return res.status(OK).json({ messgae: 'Transaction deleted successfully' });
 });
 
-export const getTransactionStatsHandler = catchErrors(async (req, res) => {
+export const getDashboardHandler = catchErrors(async (req, res) => {
   const userId = req.userId;
   appAssert(userId, BAD_REQUEST, 'User not authenticated');
 
-  const stats = await getTransactionStats(userId);
+  const stats = await getDashboardStats(userId);
 
-  return res.status(OK).json({ stats });
+  return res.status(OK).json({
+    message: 'Dashboard stats retrieved successfully',
+    data: stats,
+  });
 });
