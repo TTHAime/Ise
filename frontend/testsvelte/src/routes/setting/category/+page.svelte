@@ -47,6 +47,12 @@
                 </div>
             </div>
         </div>
+
+        <div class="ml-auto md:ml-10 mt-auto md:mt-14 items-center justify-start">
+            <button class=" justify-center items-center bg-green-300 h-10 w-auto py-2 px-3 rounded-2xl shadow-sm hover:ring-1 hover:ring-black/15 hover:bg-green-400 hover:cursor-pointer font-semibold text-neutral-700" onclick={()=>{}}> <!--Add category button-->
+                CREATE Category
+            </button>
+        </div>
     </div>
 
     <section class="mt-10 w-full mx-auto justify-start"> <!--Income Category List-->
@@ -60,8 +66,8 @@
                             {c.name} <!--Category name-->
                         </div>
                         <div class="ml-auto w-40 text-right text-neutral-500"> {c.count} {c.count === 1? 'transaction' : 'transactions'}</div>
-                        <button class="p-2 rounded-lg bg-neutral-300 hover:bg-neutral-500 shadow-sm items-center" aria-label="Edit">Edit</button>
-                        <button class="p-2 rounded-lg bg-rose-200 hover:bg-rose-300 shadow-sm items-center" aria-label="Delete">Delete</button>
+                        <button class="p-2 rounded-lg bg-neutral-300 hover:bg-neutral-500 shadow-sm items-center" aria-label="Edit" onclick={()=>{}}>Edit</button>
+                        <button class="p-2 rounded-lg bg-rose-200 hover:bg-rose-300 shadow-sm items-center" aria-label="Delete" onclick={()=>{}}>Delete</button>
                     </li>
                 {/each}
             </ul>
@@ -79,8 +85,8 @@
                             {c.name} <!--Category name-->
                         </div>
                         <div class="ml-auto w-40 text-right text-neutral-500"> {c.count} {c.count === 1? 'transaction' : 'transactions'}</div>
-                        <button class="p-2 rounded-lg bg-neutral-300 hover:bg-neutral-500 shadow-sm items-center" aria-label="Edit">Edit</button>
-                        <button class="p-2 rounded-lg bg-rose-200 hover:bg-rose-300 shadow-sm items-center" aria-label="Delete">Delete</button>
+                        <button class="p-2 rounded-lg bg-neutral-300 hover:bg-neutral-500 shadow-sm items-center" aria-label="Edit" onclick={()=>{}}>Edit</button>
+                        <button class="p-2 rounded-lg bg-rose-200 hover:bg-rose-300 shadow-sm items-center" aria-label="Delete" onclick={()=>{}}>Delete</button>
                     </li>
                 {/each}
             </ul>
