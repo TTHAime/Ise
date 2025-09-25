@@ -2,8 +2,6 @@
 	import { fade, scale } from 'svelte/transition';
 	import LoginFrame from "$lib/assets/loginFrame.png";
 	import { goto } from '$app/navigation';
-	import { json } from '@sveltejs/kit';
-	import { writable } from 'svelte/store';
 
 	let firstField: HTMLInputElement | null = null;
 	let overlay: HTMLDivElement | null = $state(null);
@@ -16,10 +14,15 @@
 		onClose = () => {},
 	} = $props();
 
+	let MsgOpen = $state(false);
+	let MsgNoti = $state('');
+	let MsgKind = $state<'success' | 'error'>('success');
+
 	let email:string= $state('');
 	let password:string = $state('');
 	let confirmPassword:string = $state('');
 	let name :string= $state('');
+	let emailForgetPassword : string = $state('');
 	async function handleSubmitlogin() {
 		alert(`Email: ${email}\nPassword: ${password}`);//check bind value for dev
 		let postdata = {
@@ -102,11 +105,11 @@
 		mode = 'forgot';
 	}
 
-	async function sendVarificationCodeClick(){
+	async function sendVerificationCodeClick(){
 		//api
-		alert(`Email ${email}`)
+		alert(`Email ${emailForgetPassword}`)
 		let postData = {
-			email : email
+			email : emailForgetPassword
 		}
 		const response = await fetch('http://localhost:4000/auth/password/forgot',{
 			method : 'POST',
@@ -114,12 +117,7 @@
 			body : JSON.stringify(postData)
 		});
 		if(response.ok){
-			const body : string = await response.json();
-			alert(`Message : ${response.json()}`);
-			mode = 'sent';
-		}else{
-			const body : string = await response.json();
-			alert(`Error Message : ${response.json()}`);
+			showMsg('Verification code sent to your email!', 'success');
 		}
 		
 	}
@@ -173,6 +171,14 @@
 			}
 		}
 		return true;
+	}
+
+	function showMsg(noti: string, kind: 'success' | 'error' = 'success') { //function for show notification
+		MsgNoti = noti;
+		MsgKind = kind;
+		MsgOpen = true;
+		setTimeout(() => (MsgOpen = false), 3000); // Auto close after 3 sec
+		goto('/');
 	}
 </script>
 
@@ -377,11 +383,11 @@
 						<input type="Email" 
 						class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 						placeholder="Email"
-						name="Email" required bind:value={email}>
+						name="Email" required bind:value={emailForgetPassword}>
 					</div>
 					<div class="relative flex flex-col items-center w-full h-[100px]">
 						<button type="submit" class="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-lime-200 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 dark:focus:ring-lime-800"
-						onclick={() => {sendVarificationCodeClick()}}>
+						onclick={() => {sendVerificationCodeClick()}}>
 							<span
 								class="relative rounded-md bg-white px-7 py-2.5 font-bold transition-all duration-75 ease-in group-hover:bg-transparent dark:bg-gray-900 group-hover:dark:bg-transparent"
 							>
@@ -391,7 +397,7 @@
 					</div>
 				</form>
 			{/if}
-			{#if mode === 'sent'}
+			<!-- {#if mode === 'sent'}
 			<p class="mx-auto max-w-sm align-middle head-text-shadow text-center text-5xl font-black text-gray-900">RESET PASSWORD</p>
 			<form class="mx-auto max-w-sm align-middle" onsubmit={(e) =>{{e.preventDefault;}}}>
 				<div class="mt-5 relative flex flex-col h-[150px] w-full justify-center">
@@ -412,9 +418,9 @@
 							</span>
 						</button>
 					</div>
-			</form>
-			{/if}
-			{#if mode === 'resetPass'}
+			</form> -->
+			<!-- {/if} -->
+			<!-- {#if mode === 'resetPass'}
 				<p class="mx-auto max-w-sm align-middle head-text-shadow text-center text-5xl font-black text-gray-900">RESET PASSWORD</p>
 				<form class="mx-auto max-w-sm align-middle" onsubmit={(e) =>{{e.preventDefault;}}}>
 					<div class="mt-5 relative flex flex-col h-[150px] w-full justify-center">
@@ -438,6 +444,12 @@
 						</button>
 					</div>
 				</form>
+			{/if} -->
+			{#if MsgOpen}
+				<div role="status" aria-live="polite" class="fixed bottom-20 left-1/2 -translate-x-1/2 rounded-xl px-4 py-2 text-white shadow-lg z-50"
+					transition:fade={{ duration: 200 }}>
+					<p class="text-sm {MsgKind === 'success' ? 'text-green-600' : 'text-red-600'}">{MsgNoti}</p>
+				</div>
 			{/if}
 		</div>
 	</div>

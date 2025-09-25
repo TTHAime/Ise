@@ -12,7 +12,7 @@
         { name: "Transaction", href: "/Transaction", icon: CalendarPlusSolid },
         { name: "Analytics", href: "/analytics", icon: ChartMixedDollarSolid },
         { name: "About us", href: "/etc", icon: FaceLaughSolid },
-        { name: "Setting", href: "/setting", icon: UserSettingsSolid },
+        { name: "Setting", href: "/setting/account", icon: UserSettingsSolid },
     ];
     import { blur, slide, scale } from "svelte/transition";
 
