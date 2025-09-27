@@ -38,7 +38,7 @@
     }
 </style>
 
-<nav class="sticky header font-mono bg-white bg-auto md:bg-contain mx-4 mt-4 p-4 rounded-md justify-between flex align-middle drop-shadow-lg">
+<nav class="z-60 sticky header font-mono bg-white bg-auto md:bg-contain mx-4 mt-4 p-4 rounded-md justify-between flex align-middle drop-shadow-lg">
     <img src={logo} alt="ExpenTrack" class="h-13 w-13 ml-2">
     <span class="text-3xl font-bold bg-gradient-to-r from-blue-500 to-green-400 bg-clip-text text-transparent mr-auto ml-4 mt-2">ExpenTrack</span>
     <ul class="mr-2 justify-center align-middle flex items-center space-x-10">

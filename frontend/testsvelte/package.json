@@ -3,6 +3,16 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"svelte": "./src/index.js",
+	"exports": {
+		".": {
+			"svelte": "./src/index.js",
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -41,5 +51,8 @@
 		"vite": "^7.1.6",
 		"vitest": "^3.2.3",
 		"vitest-browser-svelte": "^0.1.0"
+	},
+	"dependencies": {
+		"svelte-awesome-color-picker": "^4.0.2"
 	}
 }

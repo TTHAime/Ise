@@ -1,7 +1,8 @@
 <script lang="ts">
-    let color = $state('#E74C3C'); //default color
-    let colorInput : HTMLInputElement | null = null; //reference to color input
-
+    import  ColorPicker  from 'svelte-awesome-color-picker';
+    import { colord, Colord } from 'colord'; //color library
+    let color = $state(colord('#E74C3C')); //default color
+    let openPickColor = $state(false);  //color picker toggle
     type Category = { id: string; name: string; color: string; count: number };
 
     let categories = $state<Category[]>([
@@ -14,7 +15,14 @@
         { id: '7', name: 'อื่นๆ',       color: '#9e9e9e', count: 2 },
         { id: '8', name: 'อื่นๆ',       color: '#9e9e9e', count: 2 },
     ]);
+
+    function closeOnScroll(){ //close color picker when scroll
+        openPickColor = false;
+    }
+
 </script>
+
+<svelte:window onscroll={closeOnScroll} onkeydown={(e) => {if(openPickColor && e.key === 'Escape') openPickColor = false;}}></svelte:window>
 
 <div class="w-auto md:w-full items-start p-3 justify-start">
     <h2 class="text-xl font-semibold w-full">Create a new Category</h2>
@@ -23,11 +31,16 @@
             <div> <!--Icon Color-->
                 <label for="icon-label" class="block text-sm text-neutral-500">Icon</label>
 
-                <button type="button" class="mt-3 w-[72px] h-[72px] rounded-2xl bg-white ring-1 ring-black/15 items-center justify-center" aria-label="Pick icon color" title="Pick icon color">
-                    <span class="w-8 h-8 rounded-full" style={`background:${color}`}></span>
+                <button type="button" class="flex mt-3 w-[72px] h-[72px] rounded-2xl bg-white ring-1 ring-black/15 items-center justify-center hover:cursor-pointer" aria-label="Pick icon color" title="Pick icon color" onclick={() => { openPickColor = !openPickColor; }}>
+                    <!-- <ColorPicker bind:color /> -->
+                    <span class="block w-10 h-10 rounded-full ring-1 ring-black/20" style={`background:${color.toHex()}`}></span>
                 </button>
-
-                <input type="color" bind:this={colorInput} class="sr-only" bind:value={color} />
+                {#if openPickColor}
+                    <div class="fixed inset-0 z-40" onclick={() => (openPickColor = false)} aria-hidden="true"></div>
+                    <div class="absolute z-50 mt-2 p-3 rounded-xl border bg-white dark:bg-neutral-900 shadow-lg">
+                        <ColorPicker bind:color />
+                    </div>
+                {/if}
             </div>
         </div>
         <div class="mt-6 items-start justify-start ml-auto md:ml-10"> <!--Category Name input-->
